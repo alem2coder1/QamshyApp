@@ -12,7 +12,22 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-object APIHelper {
+interface ApiService {
+    suspend fun queryAsync(
+        url: String,
+        method: String,
+        headers: Map<String, String> = emptyMap(),
+        paraDic: Map<String, Any>? = null,
+        filePart: MultipartBody.Part? = null,
+        requestBody: RequestBody? = null
+    ): Result<AjaxMsgModel>
+}
+
+class ApiServiceImpl(
+    private val baseUrl: String,
+    private val defaultLanguageProvider: () -> String
+) : ApiService {
+
     private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .retryOnConnectionFailure(true)
@@ -23,25 +38,25 @@ object APIHelper {
                 val androidVersion = android.os.Build.VERSION.RELEASE
                 val request = chain.request().newBuilder()
                     .addHeader("User-Agent", "QamshyApp/1.0")
-                    .addHeader("language", QamshyApp.currentLanguage.value.languageCulture)
+                    .addHeader("language", defaultLanguageProvider())
                     .addHeader("X-Client-Platform", "Android-$androidVersion")
                     .build()
                 chain.proceed(request)
             }
             .build()
     }
-//        .addHeader("Authorization", "Bearer ${QamshyApp.currentToken}")
-    suspend fun queryAsync(
+
+    override suspend fun queryAsync(
         url: String,
         method: String,
-        headers: Map<String, String> = emptyMap(),
-        paraDic: Map<String, Any>? = null,
-        filePart: MultipartBody.Part? = null,
-        requestBody: RequestBody? = null
+        headers: Map<String, String>,
+        paraDic: Map<String, Any>?,
+        filePart: MultipartBody.Part?,
+        requestBody: RequestBody?
     ): Result<AjaxMsgModel> {
         return withContext(Dispatchers.IO) {
             try {
-                val fullUrl = "${QamshyApp.siteUrl}$url"
+                val fullUrl = "$baseUrl$url"
                 val request = buildRequest(fullUrl, method, headers, paraDic, filePart, requestBody)
                 client.newCall(request).execute().use { response ->
                     val responseBody = response.body?.string()
@@ -110,4 +125,3 @@ object APIHelper {
         return builder.build()
     }
 }
-

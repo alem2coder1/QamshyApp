@@ -8,59 +8,76 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kz.qamshy.app.common.APIHelper
 import kz.qamshy.app.models.OrderUiState
-import kz.qamshy.app.models.site.ArticleModel
 import kz.qamshy.app.common.JsonHelper
+import kz.qamshy.app.koinmodule.data.ArticleRepository
 import kz.qamshy.app.models.site.IndexViewModel
 import kz.sira.app.viewmodels.QarBaseViewModel
 
-class HomeViewModel: QarBaseViewModel() {
+class HomeViewModel(
+    private val articleRepository: ArticleRepository
+) : QarBaseViewModel() {
     private val _articleUiState = MutableStateFlow<OrderUiState<IndexViewModel>>(OrderUiState.Loading)
     val articleUiState: StateFlow<OrderUiState<IndexViewModel>> = _articleUiState.asStateFlow()
+
     var isLoadingMore = false
         private set
     private var currentPageOffsetAll = 0
     var hasMore by mutableStateOf(true)
+    private val PAGE_SIZE = 10
+    private val _totalCount1 = MutableStateFlow(0)
+    val totalCount1: StateFlow<Int> = _totalCount1
+
+    init {
+        loadIndex()
+    }
+
     fun canLoadMore(): Boolean = !isLoadingMore && hasMore
+
     fun refreshData(isEnabled: Boolean = false) {
         if (_isRefreshing.value) return
         _isRefreshing.value = true
         hasMore = true
         currentPageOffsetAll = 0
         _articleUiState.value = OrderUiState.Success(IndexViewModel())
-        loadIndex {
+        loadIndex(forceRefresh = true) {
             _isRefreshing.value = false
         }
     }
-    private val PAGE_SIZE = 10
-    private val _totalCount1 = MutableStateFlow(0)
-    val totalCount1: StateFlow<Int> = _totalCount1
-    fun loadIndex(onComplete: () -> Unit = {}) {
+
+    fun loadIndex(forceRefresh: Boolean = false, onComplete: () -> Unit = {}) {
         viewModelScope.launch {
-            val result = APIHelper.queryAsync("index", "GET")
-            result.fold(
-                onSuccess = { ajaxMsg ->
-                    if (ajaxMsg.status.equals("success", ignoreCase = true)) {
-                        val response = JsonHelper.convertAnyToObject<IndexViewModel>(ajaxMsg.data)
-                        val newOrders = response?: IndexViewModel()
-                        hasMore = (newOrders.pinnedArticleList.size >= PAGE_SIZE)
-                        val currentOrders = when (val state = _articleUiState.value) {
-                            is OrderUiState.Success -> state.data
-                            else -> IndexViewModel()
-                        }
-                        _articleUiState.value = OrderUiState.Success(newOrders)
-                    } else {
-                        _articleUiState.value = OrderUiState.Error("Load failed: Incorrect state")
-                    }
+            _articleUiState.value = OrderUiState.Loading
+
+            // 从仓库获取数据，考虑离线访问
+            articleRepository.getIndex(forceRefresh).fold(
+                onSuccess = { indexViewModel ->
+                    hasMore = (indexViewModel.pinnedArticleList.size >= PAGE_SIZE)
+                    _articleUiState.value = OrderUiState.Success(indexViewModel)
                     onComplete()
                 },
-                onFailure = {
-                    _articleUiState.value = OrderUiState.Error("Load failed: Incorrect state")
-                    onComplete()
+                onFailure = { exception ->
+                    // 如果失败，尝试从缓存获取
+                    articleRepository.getIndexFromCache().fold(
+                        onSuccess = { cachedData ->
+                            if (cachedData.pinnedArticleList.isNotEmpty() ||
+                                cachedData.focusArticleList.isNotEmpty() ||
+                                cachedData.blockList.isNotEmpty()) {
+
+                                hasMore = (cachedData.pinnedArticleList.size >= PAGE_SIZE)
+                                _articleUiState.value = OrderUiState.Success(cachedData)
+                            } else {
+                                _articleUiState.value = OrderUiState.Error("No cached data available")
+                            }
+                            onComplete()
+                        },
+                        onFailure = {
+                            _articleUiState.value = OrderUiState.Error("Load failed: ${exception.message}")
+                            onComplete()
+                        }
+                    )
                 }
             )
         }
     }
-
 }

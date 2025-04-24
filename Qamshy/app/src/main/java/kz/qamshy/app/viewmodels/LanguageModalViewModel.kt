@@ -9,7 +9,7 @@ import kz.qamshy.app.common.JsonHelper
 import kz.qamshy.app.models.LanguageModel
 import kz.qamshy.app.ui.QamshyApp
 
-class LanguageModalViewModel : QarBaseViewModel() {
+class LanguageModalViewModel(get: Any) : QarBaseViewModel(get) {
     private val _languageList = MutableLiveData<List<LanguageModel>>()
     val languageList: LiveData<List<LanguageModel>> get() = _languageList
 

@@ -23,7 +23,7 @@ sealed class State {
     data class Custom(val key: String) : State()
 }
 
-open class QarBaseViewModel : ViewModel() {
+open class QarBaseViewModel(get: Any) : ViewModel() {
     val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
     protected fun setRefreshing(value: Boolean) {

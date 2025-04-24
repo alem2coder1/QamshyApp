@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -50,6 +51,12 @@ android {
 dependencies {
     implementation (libs.koin.android)
     implementation (libs.koin.androidx.compose)
+    implementation(libs.koin.android.v350)
+    implementation(libs.koin.androidx.compose.v350)
+    implementation (libs.androidx.room.runtime)
+    implementation (libs.androidx.room.ktx)
+    kapt ("androidx.room:room-compiler:2.6.1")
+
 
     
     implementation(libs.androidx.core.ktx)

@@ -1,14 +1,11 @@
 package kz.qamshy.app.viewmodels
 
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kz.qamshy.app.common.APIHelper
 import kz.qamshy.app.common.JsonHelper
 import kz.qamshy.app.models.site.NotificationModel
@@ -17,7 +14,7 @@ import kz.qamshy.app.ui.activities.MainActivity
 import kz.sira.app.viewmodels.QarBaseViewModel
 
 typealias GroupedNotification = Pair<String, List<PushItem>>
-class NotificationViewModel : QarBaseViewModel() {
+class NotificationViewModel(get: Any) : QarBaseViewModel(get) {
 
     private val _notificationList =
         MutableStateFlow<List<GroupedNotification>>(emptyList())

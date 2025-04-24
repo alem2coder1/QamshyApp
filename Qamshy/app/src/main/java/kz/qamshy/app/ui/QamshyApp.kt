@@ -11,13 +11,15 @@ import kz.qamshy.app.models.LanguageModel
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.GlobalContext.startKoin
 import java.util.Locale
 
 class QamshyApp : Application() {
     private val dataStore by preferencesDataStore("city_cache_store")
     
     companion object {
-        private const val PREFS_NAME = "QamshyAppPrefs"
+        const val PREFS_NAME = "QamshyAppPrefs"
         private const val FIRST_LAUNCH_KEY = "IsFirstLaunch"
         private const val CURRENT_LANGUAGE_KEY = "CurrentLanguage"
         private const val QAR_TOKEN_KEY = "QarToken"
@@ -129,6 +131,10 @@ class QamshyApp : Application() {
         isFirstLaunch = getPreference(FIRST_LAUNCH_KEY, true) ?: true
         if (isFirstLaunch) {
             prefs.edit().putBoolean(FIRST_LAUNCH_KEY, false).apply()
+        }
+        startKoin{
+            androidContext(this@QamshyApp)
+            modules(appModule, viewModelModule, repositoryModule)
         }
 
     }
