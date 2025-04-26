@@ -4,23 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import kz.qamshy.app.common.APIHelper
+import kz.qamshy.app.common.ApiService
 import kz.qamshy.app.common.JsonHelper
 import kz.qamshy.app.models.LanguageModel
 import kz.qamshy.app.ui.QamshyApp
 
-class LanguageModalViewModel(get: Any) : QarBaseViewModel(get) {
+class LanguageModalViewModel(private val apiService: ApiService) : QarBaseViewModel() {
     private val _languageList = MutableLiveData<List<LanguageModel>>()
     val languageList: LiveData<List<LanguageModel>> get() = _languageList
 
     init {
         loadData()
     }
-//    android:networkSecurityConfig="@xml/network_security_config"
-//    android:usesCleartextTraffic="true"
-    private fun loadData() {
+    fun loadData() {
         viewModelScope.launch {
-            val result = APIHelper.queryAsync("language/list", "GET")
+            val result = apiService.queryAsync("language/list", "GET")
             result.fold(
                 onSuccess = { ajaxMsg ->
                     if (ajaxMsg.status.equals("success", ignoreCase = true)) {
@@ -31,7 +29,6 @@ class LanguageModalViewModel(get: Any) : QarBaseViewModel(get) {
                                 QamshyApp.updateLanguage(lan)
                             }
                         }
-
                     } else {
                         _languageList.postValue(emptyList())
                     }

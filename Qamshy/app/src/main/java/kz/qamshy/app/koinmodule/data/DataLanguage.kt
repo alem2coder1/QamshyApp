@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RewriteQueriesToDropUnusedColumns
 
 @Dao
 interface ArticleDao {
@@ -32,6 +33,7 @@ interface TagDao {
     suspend fun clearAllTags()
 
     @Query("SELECT * FROM tags INNER JOIN article_tag_cross_ref ON tags.id = article_tag_cross_ref.tagId WHERE article_tag_cross_ref.articleId = :articleId")
+    @RewriteQueriesToDropUnusedColumns
     suspend fun getTagsForArticle(articleId: Int): List<TagEntity>
 }
 

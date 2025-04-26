@@ -48,7 +48,6 @@ class HomeViewModel(
     fun loadIndex(forceRefresh: Boolean = false, onComplete: () -> Unit = {}) {
         viewModelScope.launch {
             _articleUiState.value = OrderUiState.Loading
-
             articleRepository.getIndex(forceRefresh).fold(
                 onSuccess = { indexViewModel ->
                     hasMore = (indexViewModel.pinnedArticleList.size >= PAGE_SIZE)

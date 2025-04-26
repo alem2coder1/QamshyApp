@@ -13,7 +13,7 @@ import kz.qamshy.app.ui.activities.MainActivity
 import kz.sira.app.viewmodels.QarBaseViewModel
 
 typealias GroupedNotification = Pair<String, List<PushItem>>
-class NotificationViewModel(get: Any) : QarBaseViewModel(get) {
+class NotificationViewModel(get: Any) : QarBaseViewModel() {
 
     private val _notificationList =
         MutableStateFlow<List<GroupedNotification>>(emptyList())

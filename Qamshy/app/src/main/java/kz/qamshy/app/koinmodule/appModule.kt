@@ -1,10 +1,13 @@
 package kz.qamshy.app.koinmodule
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import kz.qamshy.app.common.ApiService
 import kz.qamshy.app.common.ApiServiceImpl
 import kz.qamshy.app.koinmodule.data.AppDatabase
 import kz.qamshy.app.koinmodule.data.ArticleRepository
+import kz.qamshy.app.koinmodule.data.ArticleRepositoryImpl
 import kz.qamshy.app.ui.QamshyApp
 import kz.qamshy.app.ui.QamshyApp.Companion.dataStore
 import kz.qamshy.app.viewmodels.HomeViewModel
@@ -12,26 +15,27 @@ import kz.qamshy.app.viewmodels.NotificationViewModel
 import kz.sira.app.viewmodels.LanguageModalViewModel
 import kz.sira.app.viewmodels.QarBaseViewModel
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
 
 val appModule = module {
+    // 提供Context
+
     // 提供SharedPreferences
     single {
         get<Context>().getSharedPreferences(QamshyApp.PREFS_NAME, Context.MODE_PRIVATE)
     }
 
     // 提供DataStore
-    single {
+    single<DataStore<Preferences>> {
         get<Context>().dataStore
     }
-
-    // 其他通用依赖
 }
+
 val networkModule = module {
     single { QamshyApp.siteUrl }
-
 
     single<ApiService> {
         ApiServiceImpl(
@@ -57,12 +61,19 @@ val databaseModule = module {
     single { get<AppDatabase>().indexDao() }
 }
 
-//val repositoryModule = module {
-//    single { ArticleRepository(get(), get(), get()) }
-//}
+val repositoryModule = module {
+    single<ArticleRepository> {
+        ArticleRepositoryImpl(
+            apiService = get(),
+            context = androidContext(),
+            dataStore = get()
+        )
+    }
+}
+
 val viewModelModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { LanguageModalViewModel(get()) }
-    viewModel{NotificationViewModel(get())}
-    viewModel { params -> QarBaseViewModel() }
+    viewModel { NotificationViewModel(get()) }
+    viewModel { QarBaseViewModel() }
 }

@@ -39,12 +39,21 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
+        kotlinCompilerExtensionVersion = "1.5.14"  // 这个版本需要与 Kotlin 版本匹配
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+}
+
+// 添加这个配置来强制使用特定的 Kotlin 版本
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24")
+        force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24")
     }
 }
 
@@ -99,7 +108,6 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.support.annotations)
     implementation(libs.androidx.annotation)
-    implementation(libs.androidx.compiler)
     implementation(libs.firebase.vertexai)
     implementation(libs.play.services.location)
     implementation(libs.firebase.messaging.ktx)

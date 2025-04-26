@@ -50,11 +50,12 @@ import kz.qamshy.app.common.Cyrl2ToteHelper
 import kz.qamshy.app.common.ThemeHelper
 import kz.qamshy.app.common.Translator.T
 import kz.qamshy.app.common.Translator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 
 class MainActivity : ComponentActivity() {
-val homeViewModel : HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModel()
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

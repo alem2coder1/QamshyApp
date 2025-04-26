@@ -39,7 +39,7 @@ fun LanguageModal(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     onLanguageSelected: (LanguageModel) -> Unit,
-    viewModel: LanguageModalViewModel = viewModel()
+    viewModel: LanguageModalViewModel
 ) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true

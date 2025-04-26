@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "345394895404",
+    "project_id": "finalappandroid-6d5ee",
+    "storage_bucket": "finalappandroid-6d5ee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345394895404:android:149ca1fcf08ab9548e0f89",
+        "android_client_info": {
+          "package_name": "kz.qamshy.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBDgRLdV8xqU35vnDO8CEqQ4RUXBRf1K0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

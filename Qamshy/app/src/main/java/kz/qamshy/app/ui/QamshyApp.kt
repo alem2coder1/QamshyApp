@@ -11,6 +11,11 @@ import kz.qamshy.app.models.LanguageModel
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import kz.qamshy.app.koinmodule.appModule
+import kz.qamshy.app.koinmodule.databaseModule
+import kz.qamshy.app.koinmodule.networkModule
+import kz.qamshy.app.koinmodule.repositoryModule
+import kz.qamshy.app.koinmodule.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 import java.util.Locale
@@ -77,6 +82,8 @@ class QamshyApp : Application() {
 
         var currentToken: String = ""
             private set
+        var currentAndroidToken: String = ""
+            private set
 
         lateinit var appContext: Context
             private set
@@ -95,6 +102,10 @@ class QamshyApp : Application() {
                     updateIsRtl(true)
                 }
             }
+        }
+        fun setCurrentAndroidToken(token: String) {
+            currentAndroidToken = token
+            prefs.edit().putString("FCM_TOKEN", token).apply()
         }
 
         private fun putCurrentLanguagePreference(value: String?) {
@@ -134,7 +145,14 @@ class QamshyApp : Application() {
         }
         startKoin{
             androidContext(this@QamshyApp)
-            modules(appModule, viewModelModule, repositoryModule)
+            modules(
+                appModule,
+                viewModelModule,
+                networkModule,
+                databaseModule,
+                repositoryModule
+
+            )
         }
 
     }

@@ -47,6 +47,7 @@ import kz.qamshy.app.ui.theme.PrimaryFontFamily
 import kz.qamshy.app.ui.theme.selectedColor
 import kz.qamshy.app.viewmodels.HomeViewModel
 import kz.sira.app.viewmodels.LanguageModalViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeNav(
@@ -105,7 +106,7 @@ fun HomeNav(
                     ){ showLanguageModal = true }
             )
             if (showLanguageModal) {
-                val viewModel: LanguageModalViewModel = viewModel()
+                val viewModel: LanguageModalViewModel = koinViewModel()
                 LanguageModal(
                     onDismissRequest = { showLanguageModal = false },
                     onLanguageSelected = { language ->

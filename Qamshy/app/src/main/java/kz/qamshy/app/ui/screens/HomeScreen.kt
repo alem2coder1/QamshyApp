@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,7 +52,9 @@ import kz.qamshy.app.common.Translator.T
 import kz.qamshy.app.models.OrderUiState
 import kz.qamshy.app.ui.QamshyApp
 import kz.qamshy.app.ui.components.global.EmptyCard
+import kz.qamshy.app.ui.components.home.FocusCard
 import kz.qamshy.app.ui.components.home.PinnedCard
+import kz.qamshy.app.ui.components.home.WorldCard
 import kz.qamshy.app.ui.theme.darkColor
 
 
@@ -59,7 +62,7 @@ import kz.qamshy.app.ui.theme.darkColor
 fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
     val currentLanguage by QamshyApp.currentLanguage.collectAsState()
     LaunchedEffect(currentLanguage) {
-        viewModel.loadIndex()
+        viewModel.loadIndex(forceRefresh = true)
     }
     val homeBacColor = if(isDarkMode) darkColor else Color.White
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -134,6 +137,25 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
                                                     items(articleList.pinnedArticleList){ article ->
                                                         PinnedCard(currentLanguage,context,article)
                                                     }
+                                                    item{
+                                                        FocusCard(currentLanguage,context,articleList.focusArticleList)
+                                                    }
+                                                    item {
+                                                        articleList.blockList.firstOrNull()?.let { firstBlock ->
+                                                            LazyRow() {
+                                                                items(firstBlock.articleList) { article ->
+                                                                    WorldCard(
+                                                                        currentLanguage,
+                                                                        context,
+                                                                        article
+                                                                    )
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+
+
 
                                                 }
                                             } else {
@@ -172,7 +194,5 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
             ToastHelper.showMessage(context, "error", T((articleUiState as OrderUiState.Error).message,currentLanguage))
         }
     }
-
-
 
 }
