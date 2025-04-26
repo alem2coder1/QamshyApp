@@ -35,50 +35,7 @@ fun Block2Card(
 ){
 LazyColumn {
     items(articleBlock.articleList){ article ->
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(modifier = Modifier.weight(0.4f)){
-                val painter = rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(article.thumbnailUrl)
-                        .decoderFactory(SvgDecoder.Factory())
-                        .build()
-                )
-                Image(
-                    painter = painter,
-                    contentDescription = "pinned image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
 
-            Column(modifier = Modifier.weight(0.6f)) {
-                Text(
-                    text = article.title,
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        lineHeight = 16.8.sp,
-                        fontFamily = PrimaryFontFamily,
-                        fontWeight = FontWeight(600),
-                        color = Color(0xFF363636),
-                    )
-                )
-                Spacer(modifier = Modifier.height(7.dp))
-
-                Text(
-                    text = article.addTime,
-                    style = TextStyle(
-                        fontSize = 8.sp,
-                        fontFamily = PrimaryFontFamily,
-                        fontWeight = FontWeight(400),
-                        color = Color(0xFF535353),
-                    )
-                )
-            }
-
-
-        }
 
     }
 }

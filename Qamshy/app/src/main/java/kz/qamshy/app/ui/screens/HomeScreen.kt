@@ -36,6 +36,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -43,6 +45,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -199,7 +204,58 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
                                                                         )
                                                                     )
                                                                     Spacer(modifier = Modifier.height(28.dp))
-                                                                    Block2Card(currentLanguage,context,articleBlock)
+                                                                    articleBlock.articleList.forEach{ article ->
+                                                                        Row(
+                                                                            modifier = Modifier.fillMaxWidth()
+                                                                        ) {
+                                                                            Column(modifier = Modifier.weight(0.4f)){
+                                                                                val painter = rememberAsyncImagePainter(
+                                                                                    model = ImageRequest.Builder(
+                                                                                        LocalContext.current)
+                                                                                        .data(article.thumbnailUrl)
+                                                                                        .decoderFactory(
+                                                                                            SvgDecoder.Factory())
+                                                                                        .build()
+                                                                                )
+                                                                                Image(
+                                                                                    painter = painter,
+                                                                                    contentDescription = "pinned image",
+                                                                                    contentScale = ContentScale.Crop,
+                                                                                    modifier = Modifier.fillMaxSize()
+                                                                                )
+                                                                            }
+
+                                                                            Column(modifier = Modifier.weight(0.6f)) {
+                                                                                Text(
+                                                                                    text = article.title,
+                                                                                    style = TextStyle(
+                                                                                        fontSize = 14.sp,
+                                                                                        lineHeight = 16.8.sp,
+                                                                                        fontFamily = PrimaryFontFamily,
+                                                                                        fontWeight = FontWeight(600),
+                                                                                        color = Color(0xFF363636),
+                                                                                    )
+                                                                                )
+                                                                                Spacer(modifier = Modifier.height(7.dp))
+
+                                                                                Text(
+                                                                                    text = article.addTime,
+                                                                                    style = TextStyle(
+                                                                                        fontSize = 8.sp,
+                                                                                        fontFamily = PrimaryFontFamily,
+                                                                                        fontWeight = FontWeight(400),
+                                                                                        color = Color(0xFF535353),
+                                                                                    )
+                                                                                )
+                                                                            }
+
+
+                                                                        }
+
+                                                                    }
+
+
+//                                                                    Block2Card(currentLanguage,context,articleBlock)
 
                                                                 }
 
