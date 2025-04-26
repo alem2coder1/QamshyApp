@@ -58,6 +58,7 @@ import kz.qamshy.app.common.Translator.T
 import kz.qamshy.app.models.OrderUiState
 import kz.qamshy.app.ui.QamshyApp
 import kz.qamshy.app.ui.components.global.EmptyCard
+import kz.qamshy.app.ui.components.home.Block2Card
 import kz.qamshy.app.ui.components.home.FocusCard
 import kz.qamshy.app.ui.components.home.PinnedCard
 import kz.qamshy.app.ui.components.home.WorldCard
@@ -181,6 +182,28 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
                                                                         articleBlock = articleBlock
                                                                     )
                                                                 }
+                                                            1 ->
+                                                                Column(
+                                                                    modifier = Modifier
+                                                                        .fillMaxWidth()
+                                                                ){
+                                                                    Spacer(modifier = Modifier.height(30.dp))
+                                                                    Text(
+                                                                        text = articleBlock.categoryTitle,
+                                                                        style = TextStyle(
+                                                                            fontSize = 16.sp,
+                                                                            lineHeight = 20.sp,
+                                                                            fontFamily = PrimaryFontFamily,
+                                                                            fontWeight = FontWeight(600),
+                                                                            color = Color(0xFF000000),
+                                                                        )
+                                                                    )
+                                                                    Spacer(modifier = Modifier.height(28.dp))
+                                                                    Block2Card(currentLanguage,context,articleBlock)
+
+                                                                }
+
+
 
                                                         }
 
