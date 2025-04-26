@@ -29,7 +29,7 @@ interface ArticleRepository {
 class ArticleRepositoryImpl(
     private val apiService: ApiService,
     private val context: Context,
-    private val dataStore: DataStore<Preferences> // 使用DataStore来存储数据
+    private val dataStore: DataStore<Preferences>
 ) : ArticleRepository {
 
     companion object {
@@ -37,7 +37,6 @@ class ArticleRepositoryImpl(
         private val indexDataKey = stringPreferencesKey(INDEX_DATA_KEY)
     }
 
-    // 检查网络是否可用
     private fun isNetworkAvailable(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
@@ -45,17 +44,14 @@ class ArticleRepositoryImpl(
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
     }
 
-    // 获取首页数据，考虑缓存
     override suspend fun getIndex(forceRefresh: Boolean): Result<IndexViewModel> {
         return if (isNetworkAvailable() && forceRefresh) {
-            // 强制刷新或有网络时从网络获取
             fetchIndexFromNetwork().also { result ->
                 result.onSuccess { data ->
                     saveIndexToCache(data)
                 }
             }
         } else if (isNetworkAvailable()) {
-            // 有网络但不是强制刷新，先尝试从缓存获取，如果没有再从网络获取
             getIndexFromCache().fold(
                 onSuccess = { Result.success(it) },
                 onFailure = {
@@ -67,12 +63,10 @@ class ArticleRepositoryImpl(
                 }
             )
         } else {
-            // 无网络时从缓存获取
             getIndexFromCache()
         }
     }
 
-    // 从缓存获取首页数据
     override suspend fun getIndexFromCache(): Result<IndexViewModel> {
         return try {
             val cachedDataJson = dataStore.data.first()[indexDataKey] ?: ""
@@ -91,8 +85,6 @@ class ArticleRepositoryImpl(
         }
     }
 
-    // 保存首页数据到缓存
-    // 更正后的保存首页数据到缓存方法
     private suspend fun saveIndexToCache(data: IndexViewModel) {
         try {
             val dataJson = JsonHelper.serializeObject(data)
@@ -100,12 +92,10 @@ class ArticleRepositoryImpl(
                 preferences[indexDataKey] = dataJson
             }
         } catch (e: Exception) {
-            // 记录错误但不抛出，缓存失败不应影响主流程
             Log.e("ArticleRepository", "Failed to save data to cache", e)
         }
     }
 
-    // 从网络获取首页数据
     private suspend fun fetchIndexFromNetwork(): Result<IndexViewModel> {
         return try {
             val result = apiService.queryAsync("index", "GET")
@@ -127,15 +117,12 @@ class ArticleRepositoryImpl(
         }
     }
 
-    // 提供Flow版本的数据获取
     override fun getIndexAsFlow(): Flow<Result<IndexViewModel>> = flow {
-        emit(Result.success(IndexViewModel())) // 先发送空数据，避免UI等待
+        emit(Result.success(IndexViewModel()))
 
-        // 尝试从缓存获取
         val cachedResult = getIndexFromCache()
         cachedResult.onSuccess { emit(Result.success(it)) }
 
-        // 然后从网络获取最新数据
         if (isNetworkAvailable()) {
             emit(fetchIndexFromNetwork())
         }

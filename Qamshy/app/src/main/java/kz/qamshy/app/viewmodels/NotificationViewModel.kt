@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kz.qamshy.app.common.APIHelper
 import kz.qamshy.app.common.JsonHelper
 import kz.qamshy.app.models.site.NotificationModel
 import kz.qamshy.app.models.site.PushItem
@@ -24,7 +23,7 @@ class NotificationViewModel(get: Any) : QarBaseViewModel(get) {
     val isLoadingIndicator: StateFlow<Boolean> = _isLoadingIndicator.asStateFlow()
 
     init {
-        loadNotData()
+//        loadNotData()
     }
 
     fun navigateToVerification(context: Context) {
@@ -49,9 +48,9 @@ class NotificationViewModel(get: Any) : QarBaseViewModel(get) {
         if (_isRefreshing.value || isLoadingMore) return
         isLoadingMore = true
         currentPageOffset += 1
-        loadNotData {
-            isLoadingMore = false
-        }
+//        loadNotData {
+//            isLoadingMore = false
+//        }
     }
 
     fun refreshData(newStatusList: Set<Int> = emptySet(), isEnabled: Boolean = false ) {
@@ -59,52 +58,52 @@ class NotificationViewModel(get: Any) : QarBaseViewModel(get) {
         setRefreshing(true)
         currentPageOffset = 0
         _notificationList.value = emptyList()
-        loadNotData {
-            setRefreshing(false)
-        }
+//        loadNotData {
+//            setRefreshing(false)
+//        }
 
     }
 
 
     private var totalCount: Int = 0
     private val _allPushItems = MutableStateFlow<List<PushItem>>(emptyList())
-    fun loadNotData(onComplete: () -> Unit = {}) {
-        viewModelScope.launch {
-            _isLoadingIndicator.value = true
-            try {
-                val paraDic = mapOf(
-                    "pageSize" to 10,
-                    "pageOffset" to currentPageOffset
-                )
-                val result = APIHelper.queryAsync("/api/push/list", "POST", paraDic = paraDic)
-                result.fold(
-                    onSuccess = { ajaxMsg ->
-                        if (ajaxMsg.status.equals("success", ignoreCase = true)) {
-                            val notificationModel =
-                                JsonHelper.convertAnyToObject<NotificationModel>(ajaxMsg.data)
-                            totalCount = notificationModel?.totalCount!!
-
-                            notificationModel.dataList.let { newPushItems ->
-                                _allPushItems.value = if (currentPageOffset == 0) {
-                                    newPushItems
-                                } else {
-                                    _allPushItems.value + newPushItems
-                                }
-
-                            }
-                        }
-                    },
-                    onFailure = { exception ->
-                    }
-                )
-            } catch (e: Exception) {
-                // 异常处理
-            } finally {
-                _isLoadingIndicator.value = false
-                onComplete()
-            }
-        }
-    }
+//    fun loadNotData(onComplete: () -> Unit = {}) {
+//        viewModelScope.launch {
+//            _isLoadingIndicator.value = true
+//            try {
+//                val paraDic = mapOf(
+//                    "pageSize" to 10,
+//                    "pageOffset" to currentPageOffset
+//                )
+//                val result = APIHelper.queryAsync("/api/push/list", "POST", paraDic = paraDic)
+//                result.fold(
+//                    onSuccess = { ajaxMsg ->
+//                        if (ajaxMsg.status.equals("success", ignoreCase = true)) {
+//                            val notificationModel =
+//                                JsonHelper.convertAnyToObject<NotificationModel>(ajaxMsg.data)
+//                            totalCount = notificationModel?.totalCount!!
+//
+//                            notificationModel.dataList.let { newPushItems ->
+//                                _allPushItems.value = if (currentPageOffset == 0) {
+//                                    newPushItems
+//                                } else {
+//                                    _allPushItems.value + newPushItems
+//                                }
+//
+//                            }
+//                        }
+//                    },
+//                    onFailure = { exception ->
+//                    }
+//                )
+//            } catch (e: Exception) {
+//                // 异常处理
+//            } finally {
+//                _isLoadingIndicator.value = false
+//                onComplete()
+//            }
+//        }
+//    }
 
 
 

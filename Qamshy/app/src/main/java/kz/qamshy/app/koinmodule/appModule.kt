@@ -57,12 +57,12 @@ val databaseModule = module {
     single { get<AppDatabase>().indexDao() }
 }
 
-val repositoryModule = module {
-    single { ArticleRepository(get(), get(), get(), get(), get()) }
-}
+//val repositoryModule = module {
+//    single { ArticleRepository(get(), get(), get()) }
+//}
 val viewModelModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { LanguageModalViewModel(get()) }
     viewModel{NotificationViewModel(get())}
-    viewModel { params -> QarBaseViewModel(get()) }
+    viewModel { params -> QarBaseViewModel() }
 }

@@ -3,7 +3,6 @@ package kz.qamshy.app.koinmodule.data
 import kz.qamshy.app.models.site.ArticleModel
 import kz.qamshy.app.models.site.TagModel
 
-// Mapper类
 object ModelMappers {
     // 将ArticleModel转换为ArticleEntity
     fun mapArticleToEntity(article: ArticleModel): ArticleEntity {

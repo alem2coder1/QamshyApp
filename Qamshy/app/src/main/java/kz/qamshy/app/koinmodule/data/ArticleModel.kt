@@ -1,6 +1,8 @@
 package kz.qamshy.app.koinmodule.data
 
-// Room数据库实体
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 @Entity(tableName = "articles")
 data class ArticleEntity(
     @PrimaryKey val id: Int,
@@ -30,12 +32,11 @@ data class ArticleTagCrossRef(
     val tagId: Int
 )
 
-// 用于保存首页数据结构
 @Entity(tableName = "index_data")
 data class IndexEntity(
-    @PrimaryKey val id: Int = 1, // 只存一条记录
-    val pinnedArticleIds: String, // JSON格式存储ID列表
-    val focusArticleIds: String,  // JSON格式存储ID列表
-    val blockData: String,        // JSON格式存储块数据
+    @PrimaryKey val id: Int = 1,
+    val pinnedArticleIds: String,
+    val focusArticleIds: String,
+    val blockData: String,
     val lastUpdated: Long = System.currentTimeMillis()
 )

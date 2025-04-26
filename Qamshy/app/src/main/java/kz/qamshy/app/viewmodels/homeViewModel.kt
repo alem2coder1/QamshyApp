@@ -49,7 +49,6 @@ class HomeViewModel(
         viewModelScope.launch {
             _articleUiState.value = OrderUiState.Loading
 
-            // 从仓库获取数据，考虑离线访问
             articleRepository.getIndex(forceRefresh).fold(
                 onSuccess = { indexViewModel ->
                     hasMore = (indexViewModel.pinnedArticleList.size >= PAGE_SIZE)
@@ -57,7 +56,6 @@ class HomeViewModel(
                     onComplete()
                 },
                 onFailure = { exception ->
-                    // 如果失败，尝试从缓存获取
                     articleRepository.getIndexFromCache().fold(
                         onSuccess = { cachedData ->
                             if (cachedData.pinnedArticleList.isNotEmpty() ||
