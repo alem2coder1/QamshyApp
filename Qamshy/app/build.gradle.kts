@@ -48,7 +48,6 @@ android {
     }
 }
 
-// 添加这个配置来强制使用特定的 Kotlin 版本
 configurations.all {
     resolutionStrategy {
         force("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")

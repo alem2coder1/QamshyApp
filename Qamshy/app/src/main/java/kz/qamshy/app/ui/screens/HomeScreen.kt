@@ -64,6 +64,7 @@ import kz.qamshy.app.models.OrderUiState
 import kz.qamshy.app.ui.QamshyApp
 import kz.qamshy.app.ui.components.global.EmptyCard
 import kz.qamshy.app.ui.components.home.Block2Card
+import kz.qamshy.app.ui.components.home.Block3Card
 import kz.qamshy.app.ui.components.home.FocusCard
 import kz.qamshy.app.ui.components.home.PinnedCard
 import kz.qamshy.app.ui.components.home.WorldCard
@@ -190,7 +191,7 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
                                                             1 ->
                                                                 Column(
                                                                     modifier = Modifier
-                                                                        .fillMaxWidth()
+                                                                        .fillMaxWidth().padding(horizontal = 20.dp)
                                                                 ){
                                                                     Spacer(modifier = Modifier.height(30.dp))
                                                                     Text(
@@ -205,60 +206,42 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
                                                                     )
                                                                     Spacer(modifier = Modifier.height(28.dp))
                                                                     articleBlock.articleList.forEach{ article ->
-                                                                        Row(
-                                                                            modifier = Modifier.fillMaxWidth()
-                                                                        ) {
-                                                                            Column(modifier = Modifier.weight(0.4f)){
-                                                                                val painter = rememberAsyncImagePainter(
-                                                                                    model = ImageRequest.Builder(
-                                                                                        LocalContext.current)
-                                                                                        .data(article.thumbnailUrl)
-                                                                                        .decoderFactory(
-                                                                                            SvgDecoder.Factory())
-                                                                                        .build()
-                                                                                )
-                                                                                Image(
-                                                                                    painter = painter,
-                                                                                    contentDescription = "pinned image",
-                                                                                    contentScale = ContentScale.Crop,
-                                                                                    modifier = Modifier.fillMaxSize()
-                                                                                )
-                                                                            }
-
-                                                                            Column(modifier = Modifier.weight(0.6f)) {
-                                                                                Text(
-                                                                                    text = article.title,
-                                                                                    style = TextStyle(
-                                                                                        fontSize = 14.sp,
-                                                                                        lineHeight = 16.8.sp,
-                                                                                        fontFamily = PrimaryFontFamily,
-                                                                                        fontWeight = FontWeight(600),
-                                                                                        color = Color(0xFF363636),
-                                                                                    )
-                                                                                )
-                                                                                Spacer(modifier = Modifier.height(7.dp))
-
-                                                                                Text(
-                                                                                    text = article.addTime,
-                                                                                    style = TextStyle(
-                                                                                        fontSize = 8.sp,
-                                                                                        fontFamily = PrimaryFontFamily,
-                                                                                        fontWeight = FontWeight(400),
-                                                                                        color = Color(0xFF535353),
-                                                                                    )
-                                                                                )
-                                                                            }
-
-
-                                                                        }
-
+                                                                        Block2Card(context,article)
                                                                     }
 
-
-//                                                                    Block2Card(currentLanguage,context,articleBlock)
+                                                                }
+                                                            2 ->
+                                                                Column(
+                                                                    modifier = Modifier
+                                                                        .fillMaxWidth().padding(horizontal = 20.dp)
+                                                                ) {
+                                                                    Spacer(
+                                                                        modifier = Modifier.height(
+                                                                            20.dp
+                                                                        )
+                                                                    )
+                                                                    Text(
+                                                                        text = articleBlock.categoryTitle,
+                                                                        style = TextStyle(
+                                                                            fontSize = 16.sp,
+                                                                            lineHeight = 20.sp,
+                                                                            fontFamily = PrimaryFontFamily,
+                                                                            fontWeight = FontWeight(
+                                                                                600
+                                                                            ),
+                                                                            color = Color(0xFF000000),
+                                                                        )
+                                                                    )
+                                                                    Spacer(
+                                                                        modifier = Modifier.height(
+                                                                            10.dp
+                                                                        )
+                                                                    )
+                                                                    articleBlock.articleList.forEach{ article ->
+                                                                        Block3Card(context, article)
+                                                                    }
 
                                                                 }
-
 
 
                                                         }
