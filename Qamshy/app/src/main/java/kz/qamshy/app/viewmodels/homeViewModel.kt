@@ -1,5 +1,6 @@
 package kz.qamshy.app.viewmodels
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,6 +15,7 @@ import kz.qamshy.app.common.JsonHelper
 import kz.qamshy.app.common.SearchHistoryManager
 import kz.qamshy.app.koinmodule.data.ArticleRepository
 import kz.qamshy.app.models.site.IndexViewModel
+import kz.qamshy.app.ui.activities.DescriptionActivity
 import kz.sira.app.viewmodels.QarBaseViewModel
 
 class HomeViewModel(
@@ -78,6 +80,15 @@ class HomeViewModel(
                 }
             )
         }
+    }
+    fun navigateToDescActivity(context: Context,id:Int) {
+        navigateToActivity(
+            context = context,
+            targetActivity = DescriptionActivity ::class,
+            paraDic = mapOf(
+                "id" to id
+            )
+        )
     }
 
 

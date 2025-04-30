@@ -1,5 +1,6 @@
 package kz.qamshy.app.viewmodels
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,6 +15,7 @@ import kz.qamshy.app.models.OrderUiState
 import kz.qamshy.app.models.site.ArticleListModel
 import kz.qamshy.app.models.site.ArticleModel
 import kz.qamshy.app.models.site.CategoryModel
+import kz.qamshy.app.ui.activities.DescriptionActivity
 import kz.sira.app.viewmodels.QarBaseViewModel
 
 class NewsViewModel(private val apiService: ApiService):QarBaseViewModel() {
@@ -59,6 +61,15 @@ class NewsViewModel(private val apiService: ApiService):QarBaseViewModel() {
     fun updateIsTop(isTop:Boolean){
         _isTop.value = isTop
         lectureData()
+    }
+    fun navigateToDescActivity(context: Context, id:Int) {
+        navigateToActivity(
+            context = context,
+            targetActivity = DescriptionActivity ::class,
+            paraDic = mapOf(
+                "id" to id
+            )
+        )
     }
 
 }

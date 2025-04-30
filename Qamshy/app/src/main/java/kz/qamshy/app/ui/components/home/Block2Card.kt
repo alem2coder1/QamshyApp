@@ -3,6 +3,8 @@ package kz.qamshy.app.ui.components.home
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -33,14 +36,22 @@ import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import kz.qamshy.app.models.site.ArticleModel
 import kz.qamshy.app.ui.theme.PrimaryFontFamily
+import kz.qamshy.app.viewmodels.HomeViewModel
 
 @Composable
 fun Block2Card(
     context: Context,
-    article: ArticleModel
+    article: ArticleModel,
+    viewModel:HomeViewModel
 ){
     Row(
         modifier = Modifier.fillMaxWidth()
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                viewModel.navigateToDescActivity(context,article.id)
+            }
     ) {
         Column(modifier = Modifier.weight(0.4f)){
             val painter = rememberAsyncImagePainter(

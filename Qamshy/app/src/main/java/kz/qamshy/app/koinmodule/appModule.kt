@@ -12,6 +12,7 @@ import kz.qamshy.app.ui.QamshyApp
 import kz.qamshy.app.ui.QamshyApp.Companion.dataStore
 import kz.qamshy.app.viewmodels.CategoryViewModel
 import kz.qamshy.app.viewmodels.CurrencyViewModel
+import kz.qamshy.app.viewmodels.DescriptionViewModel
 import kz.qamshy.app.viewmodels.HomeViewModel
 import kz.qamshy.app.viewmodels.NewsViewModel
 import kz.qamshy.app.viewmodels.NotificationViewModel
@@ -80,4 +81,5 @@ val viewModelModule = module {
     viewModel{ SearchViewModel(get()) }
     viewModel{NewsViewModel(get())}
     viewModel{ CurrencyViewModel(get()) }
+    viewModel{ DescriptionViewModel(get()) }
 }

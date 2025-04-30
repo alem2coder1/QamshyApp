@@ -154,13 +154,13 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
 
                                                     items(articleList.pinnedArticleList){ article ->
                                                         Box(modifier = Modifier.padding(horizontal = 20.dp)){
-                                                            PinnedCard(currentLanguage,context,article)
+                                                            PinnedCard(currentLanguage,context,article,viewModel)
                                                         }
 
                                                     }
                                                     item{
                                                         Box(modifier = Modifier.padding(horizontal = 20.dp)){
-                                                            FocusCard(currentLanguage,context,articleList.focusArticleList)
+                                                            FocusCard(currentLanguage,context,articleList.focusArticleList, viewModel)
                                                         }
 
                                                     }
@@ -187,7 +187,8 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
                                                                     WorldCardRow(
                                                                         currentLanguage = currentLanguage,
                                                                         context = context,
-                                                                        articleBlock = articleBlock
+                                                                        articleBlock = articleBlock,
+                                                                        viewModel
                                                                     )
                                                                 }
                                                             1 ->
@@ -208,7 +209,7 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
                                                                     )
                                                                     Spacer(modifier = Modifier.height(28.dp))
                                                                     articleBlock.articleList.forEach{ article ->
-                                                                        Block2Card(context,article)
+                                                                        Block2Card(context,article,viewModel)
                                                                     }
 
                                                                 }
@@ -234,7 +235,7 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
                                                                             10.dp
                                                                         )
                                                                     )
-                                                                    Block3Card(context,articleBlock.articleList)
+                                                                    Block3Card(context,articleBlock.articleList, viewModel)
                                                                 }
 
 

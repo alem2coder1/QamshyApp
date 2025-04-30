@@ -44,6 +44,11 @@
             android:exported="true"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.Qamshy" />
+        <activity android:name=".ui.activities.DescriptionActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.Qamshy" />
+
         <service
             android:name=".common.notification.MyFirebaseMessagingService"
             android:exported="false">

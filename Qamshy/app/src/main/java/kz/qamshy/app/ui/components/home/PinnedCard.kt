@@ -3,6 +3,8 @@ package kz.qamshy.app.ui.components.home
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,24 +30,33 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import kz.qamshy.app.models.LanguageModel
 import kz.qamshy.app.models.site.ArticleModel
 import kz.qamshy.app.ui.theme.PrimaryFontFamily
+import kz.qamshy.app.viewmodels.HomeViewModel
 
 @Composable
 fun PinnedCard(
     currentLanguage: LanguageModel,
     context:Context,
-    article:ArticleModel
+    article:ArticleModel,
+    viewModel: HomeViewModel
     ){
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(199.dp)
             .clip(RoundedCornerShape(10.dp))
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                viewModel.navigateToDescActivity(context,article.id)
+            }
     ) {
         val painter = rememberAsyncImagePainter(
             model = ImageRequest.Builder(LocalContext.current)
