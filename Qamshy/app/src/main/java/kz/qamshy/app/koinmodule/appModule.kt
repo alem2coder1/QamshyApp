@@ -12,6 +12,7 @@ import kz.qamshy.app.ui.QamshyApp
 import kz.qamshy.app.ui.QamshyApp.Companion.dataStore
 import kz.qamshy.app.viewmodels.CategoryViewModel
 import kz.qamshy.app.viewmodels.HomeViewModel
+import kz.qamshy.app.viewmodels.NewsViewModel
 import kz.qamshy.app.viewmodels.NotificationViewModel
 import kz.qamshy.app.viewmodels.SearchViewModel
 import kz.sira.app.viewmodels.LanguageModalViewModel
@@ -76,4 +77,5 @@ val viewModelModule = module {
     viewModel { QarBaseViewModel() }
     viewModel { CategoryViewModel(get()) }
     viewModel{ SearchViewModel(get()) }
+    viewModel{NewsViewModel(get())}
 }
