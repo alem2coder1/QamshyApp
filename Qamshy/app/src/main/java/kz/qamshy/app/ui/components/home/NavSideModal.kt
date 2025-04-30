@@ -47,6 +47,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kz.qamshy.app.R
 import kz.qamshy.app.common.Cyrl2LatynHelper
@@ -56,13 +57,16 @@ import kz.qamshy.app.models.LanguageModel
 import kz.qamshy.app.ui.activities.MainActivity
 import kz.qamshy.app.ui.components.global.ComposHr
 import kz.qamshy.app.ui.theme.PrimaryFontFamily
+import kz.qamshy.app.viewmodels.CurrencyViewModel
 
 
 @Composable
 fun NavSideModal(context: Context,
                  currentLanguage:LanguageModel,
-                 isRtl:Boolean
+                 isRtl:Boolean,
+                 currencyViewModel: CurrencyViewModel
                  ){
+    val currencyList by currencyViewModel.currencyList.collectAsState()
     Spacer(modifier = Modifier.height(54.dp))
 
     Column (
@@ -74,6 +78,7 @@ fun NavSideModal(context: Context,
             ,
             horizontalArrangement = Arrangement.Center
         ){
+
             Image(
                 painter = painterResource(id = R.drawable.logo_dark),
                 contentDescription = "dark logo",
@@ -189,7 +194,7 @@ fun NavSideModal(context: Context,
                 horizontalArrangement = Arrangement.End
             ){
                 Text(
-                    text = "Валюта бағамы",
+                    text = T("ls_Exchangerate",currentLanguage),
                     style = TextStyle(
                         fontSize = 14.sp,
                         fontFamily = PrimaryFontFamily,
@@ -202,80 +207,39 @@ fun NavSideModal(context: Context,
             Row(
                 modifier = Modifier.fillMaxWidth().weight(0.4f)
             ){
-                Column(
-                    modifier = Modifier.weight(0.33f),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ){
-                    Image(
-                        painter = painterResource(id = R.drawable.ero_flag_icon),
-                        contentDescription = "usd",
-                        modifier = Modifier
-                            .padding(0.dp)
-                            .width(25.dp)
-                            .height(25.dp)
+                currencyList.forEach(){ currency ->
+                    val painter = rememberAsyncImagePainter(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(currency.flagUrl)
+                            .decoderFactory(SvgDecoder.Factory())
+                            .build()
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = "EUR 546",
-                        style = TextStyle(
-                            fontSize = 13.sp,
-                            fontFamily = PrimaryFontFamily,
-                            fontWeight = FontWeight(500),
-                            color = Color(0xFF363636),
-                            textAlign = TextAlign.Center
+                    Column(
+                        modifier = Modifier.weight(0.33f),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                        Image(
+                            painter = painter,
+                            contentDescription = "usd",
+                            modifier = Modifier
+                                .padding(0.dp)
+                                .width(25.dp)
+                                .height(25.dp)
                         )
-                    )
-                }
-                Column(
-                    modifier = Modifier.weight(0.33f),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ){
-                    Image(
-                        painter = painterResource(id = R.drawable.russia_flag_icon),
-                        contentDescription = "usd",
-                        modifier = Modifier
-                            .padding(0.dp)
-                            .width(25.dp)
-                            .height(25.dp)
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = "RUB 5",
-                        style = TextStyle(
-                            fontSize = 13.sp,
-                            fontFamily = PrimaryFontFamily,
-                            fontWeight = FontWeight(500),
-                            color = Color(0xFF363636),
-                            textAlign = TextAlign.Center
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = currency.title + "${currency.rate}",
+                            style = TextStyle(
+                                fontSize = 13.sp,
+                                fontFamily = PrimaryFontFamily,
+                                fontWeight = FontWeight(500),
+                                color = Color(0xFF363636),
+                                textAlign = TextAlign.Center
+                            )
                         )
-                    )
-                }
-                Column(
-                    modifier = Modifier.weight(0.33f),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ){
-                    Image(
-                        painter = painterResource(id = R.drawable.usa_flag_icon),
-                        contentDescription = "usd",
-                        modifier = Modifier
-                            .padding(0.dp)
-                            .width(25.dp)
-                            .height(25.dp)
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = "USD 504",
-                        style = TextStyle(
-                            fontSize = 13.sp,
-                            fontFamily = PrimaryFontFamily,
-                            fontWeight = FontWeight(500),
-                            color = Color(0xFF363636),
-                            textAlign = TextAlign.Center
-                        )
-                    )
+                    }
+
                 }
 
             }

@@ -71,13 +71,15 @@ import kz.qamshy.app.ui.components.home.WorldCard
 import kz.qamshy.app.ui.components.home.WorldCardRow
 import kz.qamshy.app.ui.theme.PrimaryFontFamily
 import kz.qamshy.app.ui.theme.darkColor
+import kz.qamshy.app.viewmodels.CurrencyViewModel
 
 
 @Composable
-fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
+fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,currencyViewModel:CurrencyViewModel) {
     val currentLanguage by QamshyApp.currentLanguage.collectAsState()
     LaunchedEffect(currentLanguage) {
         viewModel.loadIndex(forceRefresh = true)
+        currencyViewModel.lectureData()
     }
     val homeBacColor = if(isDarkMode) darkColor else Color.White
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -115,7 +117,7 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
                                         .background(Color(0xFFFFFFFF), shape = RoundedCornerShape(0.dp)),
                                     drawerContainerColor = Color(0xFFFFFFFF)
                                 ) {
-                                    NavSideModal(context,currentLanguage,isRtl)
+                                    NavSideModal(context,currentLanguage,isRtl,currencyViewModel)
                                 }
                             },
                             gesturesEnabled = true

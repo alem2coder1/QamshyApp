@@ -20,7 +20,7 @@ object LanguagePackHelper {
     }
 
     suspend fun getLanguagePackJsonString(language: String, context: Context): String {
-        val languageLocalKey = "language_pack_new1_$language"
+        val languageLocalKey = "language_pack_new2_$language"
         return withContext(Dispatchers.IO) {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             var result = sharedPreferences.getString(languageLocalKey, "")

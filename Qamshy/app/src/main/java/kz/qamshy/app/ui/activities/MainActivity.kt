@@ -51,6 +51,7 @@ import kz.qamshy.app.common.ThemeHelper
 import kz.qamshy.app.common.Translator.T
 import kz.qamshy.app.common.Translator
 import kz.qamshy.app.viewmodels.CategoryViewModel
+import kz.qamshy.app.viewmodels.CurrencyViewModel
 import kz.qamshy.app.viewmodels.NewsViewModel
 import kz.qamshy.app.viewmodels.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -62,6 +63,7 @@ class MainActivity : ComponentActivity() {
     private val categoryViewModel: CategoryViewModel by viewModel()
     private val searchViewModel: SearchViewModel by viewModel()
     private val newsViewModel : NewsViewModel by viewModel()
+    private val currencyViewModel: CurrencyViewModel by viewModel()
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,7 +148,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     when(status){
                         ConnectivityStatus.Available -> {
-                            composable("home") { HomeScreen(context,isDarkMode,homeViewModel) }
+                            composable("home") { HomeScreen(context,isDarkMode,homeViewModel,currencyViewModel) }
                             composable("category") { CategoryScreen(context,isDarkMode,categoryViewModel,currentLanguage) }
                             composable("search") {  SearchScreen(context,isDarkMode,searchViewModel) }
                             composable("news") { NewsScreen(context,isDarkMode,newsViewModel) }
