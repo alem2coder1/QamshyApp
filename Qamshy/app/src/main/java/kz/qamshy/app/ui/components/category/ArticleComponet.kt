@@ -89,6 +89,12 @@ fun ArticleComponent(
                 items(articleLists.articleList) { article ->
                     Row(
                         modifier = Modifier.fillMaxWidth()
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) {
+                                viewModel.navigateToDescActivity(context,article.id)
+                            }
                     ) {
                         Column(modifier = Modifier.weight(0.4f)){
                             val painter = rememberAsyncImagePainter(
@@ -136,10 +142,11 @@ fun ArticleComponent(
                     Divider(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 14.dp)
-                            .height(1.dp)
-                            .background(Color(0x33C1C1C1).copy(alpha = 0.5f))
+                            .padding(vertical = 14.dp),
+                        thickness = 1.dp,
+                        color = Color(0xFFC1C1C1).copy(alpha = 0.5f)
                     )
+
                 }
             }
         } else {
