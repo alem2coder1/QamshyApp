@@ -75,7 +75,15 @@ fun SearchScreen(context: Context, isDarkMode:Boolean, viewModel: SearchViewMode
                 onTextChange = { text ->
                     viewModel.updateSearch(text)
                 },
-                placeholderText = T("ls_Search", currentLanguage)
+                placeholderText = T("ls_Search", currentLanguage),
+                onSearch = {
+                    if (searchText.isNotEmpty()) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            searchHistoryManager.addSearchQuery(searchText)
+                        }
+                        viewModel.performSearch()
+                    }
+                }
             )
         }
         Spacer(modifier = Modifier.height(17.dp))

@@ -4,12 +4,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -22,15 +24,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kz.qamshy.app.ui.QamshyApp
 import kz.qamshy.app.ui.theme.PrimaryFontFamily
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,10 +45,13 @@ fun CustomTextField(
     text: String,
     onTextChange: (String) -> Unit,
     placeholderText: String,
-    isError: Boolean = false
+    isError: Boolean = false,
+    onSearch: () -> Unit = {}
 ) {
     var textState by remember { mutableStateOf(text) }
     val currentLanguage by QamshyApp.currentLanguage.collectAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     TextField(
         value = textState,
@@ -52,7 +62,7 @@ fun CustomTextField(
         placeholder = {
             Text(
                 text = placeholderText + "...",
-                color =  MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                 style = TextStyle(
                     fontSize = 15.sp,
                     fontFamily = PrimaryFontFamily,
@@ -63,11 +73,16 @@ fun CustomTextField(
             )
         },
         leadingIcon = {
-            Icon(
-                Icons.Default.Search,
-                contentDescription = "Search",
-                tint = Color(0xFF58A0C8)
-            )
+            IconButton(onClick = {
+                onSearch()
+                keyboardController?.hide()
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search",
+                    tint = Color(0xFF58A0C8)
+                )
+            }
         },
         textStyle = TextStyle(
             fontSize = 16.sp,
@@ -100,13 +115,22 @@ fun CustomTextField(
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,
             errorIndicatorColor = Color.Transparent,
-            focusedPlaceholderColor =  MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-            unfocusedPlaceholderColor =  MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-            disabledPlaceholderColor =  MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
-            errorPlaceholderColor =  MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+            errorPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
         ),
-        keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Text
-        )
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Search  // 设置为搜索操作
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                onSearch()  // 调用传入的搜索函数
+                keyboardController?.hide()  // 隐藏键盘
+                focusManager.clearFocus()   // 清除焦点
+            }
+        ),
+        singleLine = true  // 确保是单行模式
     )
 }
