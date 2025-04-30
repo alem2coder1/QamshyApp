@@ -58,6 +58,7 @@ import kz.qamshy.app.ui.components.home.HomeNav
 import kz.qamshy.app.ui.components.home.NavSideModal
 import kz.qamshy.app.viewmodels.HomeViewModel
 import kz.qamshy.app.common.CircularBarsLoading
+import kz.qamshy.app.common.ThemeHelper
 import kz.qamshy.app.common.ToastHelper
 import kz.qamshy.app.common.Translator.T
 import kz.qamshy.app.models.OrderUiState
@@ -70,6 +71,7 @@ import kz.qamshy.app.ui.components.home.PinnedCard
 import kz.qamshy.app.ui.components.home.WorldCard
 import kz.qamshy.app.ui.components.home.WorldCardRow
 import kz.qamshy.app.ui.theme.PrimaryFontFamily
+import kz.qamshy.app.ui.theme.darkBac
 import kz.qamshy.app.ui.theme.darkColor
 import kz.qamshy.app.viewmodels.CurrencyViewModel
 
@@ -87,6 +89,9 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val listState = rememberLazyListState()
     val articleUiState by viewModel.articleUiState.collectAsState()
+    val themeHelper = ThemeHelper(context)
+    val isDarkMode = themeHelper.isDarkModeEnabled()
+    val bacColor = if(isDarkMode) darkBac else Color.White
     when (articleUiState) {
         is OrderUiState.Loading -> {
             CircularBarsLoading(
@@ -104,7 +109,7 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
             ){
                 Column (
                     modifier = Modifier.fillMaxSize()
-                        .background(color = Color(0xFFFFFFFF))
+                        .background(color = bacColor)
                 ){
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                         ModalNavigationDrawer(
