@@ -70,7 +70,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NotificationActivity: AppCompatActivity() {
     private val viewModel: NotificationViewModel by viewModel()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

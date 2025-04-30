@@ -4,12 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kz.qamshy.app.models.OrderUiState
 import kz.qamshy.app.common.JsonHelper
+import kz.qamshy.app.common.SearchHistoryManager
 import kz.qamshy.app.koinmodule.data.ArticleRepository
 import kz.qamshy.app.models.site.IndexViewModel
 import kz.sira.app.viewmodels.QarBaseViewModel
@@ -77,4 +79,5 @@ class HomeViewModel(
             )
         }
     }
+
 }

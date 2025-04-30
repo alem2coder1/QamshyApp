@@ -19,10 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -34,127 +37,107 @@ import kz.qamshy.app.ui.theme.PrimaryFontFamily
 @Composable
 fun Block3Card(
     context: Context,
-    article: ArticleModel
-){
-    Row(modifier = Modifier.fillMaxWidth()){
-
-        Column(modifier = Modifier.weight(0.45f)){
-            Box(
+    articleList: List<ArticleModel>
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        articleList.chunked(2).forEach { rowItems ->
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(174.dp)
-                    .clip(RoundedCornerShape(10.dp))
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                val painter = rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(article.thumbnailUrl)
-                        .decoderFactory(SvgDecoder.Factory())
-                        .build()
-                )
-
-                Image(
-                    painter = painter,
-                    contentDescription = "pinned image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(horizontal = 20.dp, vertical = 10.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .height(25.dp)
-                            .background(Color(0xFFFF9500), shape = RoundedCornerShape(5.dp))
-                            .padding(horizontal = 8.dp)
-                        ,
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = article.categoryTitle,
-                            fontSize = 12.sp,
-                            fontFamily = PrimaryFontFamily,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.White,
-                        )
-
-                    }
-
-                    Text(
-                        text = article.title,
-                        fontSize = 16.sp,
-                        fontFamily = PrimaryFontFamily,
-                        fontWeight = FontWeight(600),
-                        color = Color.White,
-                    )
+                rowItems.forEach { article ->
+                    Block3Item(article = article, modifier = Modifier.weight(1f))
                 }
-
+                if (rowItems.size == 1) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
         }
-        Column(modifier = Modifier.weight(0.01f)){
-        Spacer(modifier = Modifier.fillMaxSize())
-        }
-        Column(modifier = Modifier.weight(0.45f)){
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(174.dp)
-                    .clip(RoundedCornerShape(10.dp))
-            ) {
-                val painter = rememberAsyncImagePainter(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(article.thumbnailUrl)
-                        .decoderFactory(SvgDecoder.Factory())
-                        .build()
-                )
-
-                Image(
-                    painter = painter,
-                    contentDescription = "pinned image",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(horizontal = 20.dp, vertical = 10.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .height(25.dp)
-                            .background(Color(0xFFFF9500), shape = RoundedCornerShape(5.dp))
-                            .padding(horizontal = 8.dp)
-                        ,
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = article.categoryTitle,
-                            fontSize = 12.sp,
-                            fontFamily = PrimaryFontFamily,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.White,
-                        )
-
-                    }
-
-                    Text(
-                        text = article.title,
-                        fontSize = 16.sp,
-                        fontFamily = PrimaryFontFamily,
-                        fontWeight = FontWeight(600),
-                        color = Color.White,
-                    )
-                }
-
-            }
-        }
-
-
     }
+}
 
+@Composable
+fun Block3Item(article: ArticleModel, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .height(174.dp)
+            .clip(RoundedCornerShape(10.dp))
+    ) {
+        val painter = rememberAsyncImagePainter(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(article.thumbnailUrl)
+                .decoderFactory(SvgDecoder.Factory())
+                .build()
+        )
+        Image(
+            painter = painter,
+            contentDescription = article.title,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            Color.Black.copy(alpha = 0.3f)
+                        ),
+                        startY = 100f,
+                        endY = Float.POSITIVE_INFINITY
+                    )
+                )
+        )
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                ,
+        ) {
+            Box(
+                modifier = Modifier
+                    .height(34.dp)
+                    .fillMaxWidth()
+                    .background(Color(0xFFFF9500), RoundedCornerShape(5.dp))
+                    .padding(horizontal = 8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = article.categoryTitle,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        lineHeight = 20.sp,
+                        fontFamily = PrimaryFontFamily,
+                        fontWeight = FontWeight(600),
+                        color = Color(0xFFFFFFFF),
+                        ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+        }
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(10.dp)
+            ,
+        ) {
+            Text(
+                text = article.title,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    fontFamily = PrimaryFontFamily,
+                    fontWeight = FontWeight(600),
+                    color = Color(0xFFFFFFFF),
+                ),
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis
+
+            )
+        }
+    }
 }

@@ -84,15 +84,13 @@ fun Block2Card(
                 )
             )
         }
-
-
     }
     Divider(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 14.dp)
             .height(1.dp)
-            .background(Color(0x33C1C1C1))
+            .background(Color(0x33C1C1C1).copy(alpha = 0.5f))
     )
 
 }

@@ -11,6 +11,7 @@ import kz.qamshy.app.models.LanguageModel
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import kz.qamshy.app.common.SearchHistoryManager
 import kz.qamshy.app.koinmodule.appModule
 import kz.qamshy.app.koinmodule.databaseModule
 import kz.qamshy.app.koinmodule.networkModule
@@ -22,7 +23,7 @@ import java.util.Locale
 
 class QamshyApp : Application() {
     private val dataStore by preferencesDataStore("city_cache_store")
-    
+    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "app_preferences")
     companion object {
         const val PREFS_NAME = "QamshyAppPrefs"
         private const val FIRST_LAUNCH_KEY = "IsFirstLaunch"
@@ -154,6 +155,7 @@ class QamshyApp : Application() {
 
             )
         }
+        SearchHistoryManager.getInstance().initialize(this)
 
     }
 

@@ -193,7 +193,7 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
                                                                     modifier = Modifier
                                                                         .fillMaxWidth().padding(horizontal = 20.dp)
                                                                 ){
-                                                                    Spacer(modifier = Modifier.height(30.dp))
+                                                                    Spacer(modifier = Modifier.height(10.dp))
                                                                     Text(
                                                                         text = articleBlock.categoryTitle,
                                                                         style = TextStyle(
@@ -215,11 +215,6 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
                                                                     modifier = Modifier
                                                                         .fillMaxWidth().padding(horizontal = 20.dp)
                                                                 ) {
-                                                                    Spacer(
-                                                                        modifier = Modifier.height(
-                                                                            20.dp
-                                                                        )
-                                                                    )
                                                                     Text(
                                                                         text = articleBlock.categoryTitle,
                                                                         style = TextStyle(
@@ -237,10 +232,7 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel) {
                                                                             10.dp
                                                                         )
                                                                     )
-                                                                    articleBlock.articleList.forEach{ article ->
-                                                                        Block3Card(context, article)
-                                                                    }
-
+                                                                    Block3Card(context,articleBlock.articleList)
                                                                 }
 
 
