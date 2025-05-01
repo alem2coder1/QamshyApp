@@ -54,7 +54,8 @@ fun NewsComponent(
     viewModel: NewsViewModel,
     articleLists : List<ArticleModel>,
     context: Context,
-    currentLanguage : LanguageModel
+    currentLanguage : LanguageModel,
+    bacColorCo:Color
 ){
     val isTop by viewModel.isTop.collectAsState()
     val backColor = if(isTop) Color(0xFF58A0C8) else Color.White
@@ -76,7 +77,7 @@ fun NewsComponent(
 
     val listState = rememberLazyListState()
     Column(modifier = Modifier.fillMaxSize()
-        .background(Color.White)
+        .background(bacColorCo)
     ){
         Spacer(modifier = Modifier.height(54.dp))
         Row(modifier = Modifier.fillMaxWidth()

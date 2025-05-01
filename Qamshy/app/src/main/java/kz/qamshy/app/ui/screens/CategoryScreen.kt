@@ -37,7 +37,7 @@ import kz.qamshy.app.viewmodels.HomeViewModel
 
 @Composable
 fun CategoryScreen(context: Context, isDarkMode:Boolean, viewModel: CategoryViewModel
-,currentLanguage: LanguageModel
+,currentLanguage: LanguageModel, bacColor:Color
 ){
     val connectivityObserver = remember { ConnectivityObserver(context) }
     val status by connectivityObserver.status.collectAsState(initial = ConnectivityStatus.Available)
@@ -64,7 +64,7 @@ fun CategoryScreen(context: Context, isDarkMode:Boolean, viewModel: CategoryView
                 val categoryList = (categoryUiState as OrderUiState.Success).data
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth().background(bacColor)
                 ) {
                         Column(
                             modifier = Modifier

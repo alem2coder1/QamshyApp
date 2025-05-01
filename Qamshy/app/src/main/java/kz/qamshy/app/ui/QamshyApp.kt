@@ -95,6 +95,15 @@ class QamshyApp : Application() {
         var isFirstLaunch: Boolean = false
             private set
 
+        private val _themeType = MutableStateFlow(false)
+        val themeType: StateFlow<Boolean> = _themeType.asStateFlow()
+        fun updateThemeType(value: String) {
+            if(value == "light"){
+                _themeType.value = false
+            }else{
+                _themeType.value = true
+            }
+        }
         fun updateLanguage(value: LanguageModel) {
             if (_currentLanguage.value != value) {
                 _currentLanguage.value = value

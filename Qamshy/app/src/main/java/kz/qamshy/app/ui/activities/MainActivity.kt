@@ -121,6 +121,11 @@ class MainActivity : ComponentActivity() {
         val context = LocalContext.current
         val themeHelper = remember { ThemeHelper(context) }
         val isDarkMode = themeHelper.isDarkModeEnabled()
+        if(isDarkMode){
+            QamshyApp.updateThemeType("dark")
+        }else{
+            QamshyApp.updateThemeType("light")
+        }
         val bacColor = if (isDarkMode) darkBac else Color(0xFFFFFFFF)
         val connectivityObserver = remember { ConnectivityObserver(context) }
         val status by connectivityObserver.status.collectAsState(initial = ConnectivityStatus.Available)
@@ -149,9 +154,9 @@ class MainActivity : ComponentActivity() {
                     when(status){
                         ConnectivityStatus.Available -> {
                             composable("home") { HomeScreen(context,isDarkMode,homeViewModel,currencyViewModel,bacColor) }
-                            composable("category") { CategoryScreen(context,isDarkMode,categoryViewModel,currentLanguage) }
-                            composable("search") {  SearchScreen(context,isDarkMode,searchViewModel) }
-                            composable("news") { NewsScreen(context,isDarkMode,newsViewModel) }
+                            composable("category") { CategoryScreen(context,isDarkMode,categoryViewModel,currentLanguage,bacColor) }
+                            composable("search") {  SearchScreen(context,isDarkMode,searchViewModel,bacColor) }
+                            composable("news") { NewsScreen(context,isDarkMode,newsViewModel,bacColor) }
                         }
                         ConnectivityStatus.Unavailable -> {
                             composable("home") {  NoInternetPage() }

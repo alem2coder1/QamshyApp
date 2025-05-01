@@ -9,6 +9,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kz.qamshy.app.common.CircularBarsLoading
 import kz.qamshy.app.common.ToastHelper
@@ -20,7 +21,9 @@ import kz.qamshy.app.viewmodels.HomeViewModel
 import kz.qamshy.app.viewmodels.NewsViewModel
 
 @Composable
-fun NewsScreen(context: Context, isDarkMode:Boolean, viewModel: NewsViewModel) {
+fun NewsScreen(context: Context, isDarkMode:Boolean, viewModel: NewsViewModel,
+               bacColor: Color
+               ) {
     val currentLanguage by QamshyApp.currentLanguage.collectAsState()
     LaunchedEffect(currentLanguage) {
         viewModel.lectureData()
@@ -39,7 +42,7 @@ fun NewsScreen(context: Context, isDarkMode:Boolean, viewModel: NewsViewModel) {
         is OrderUiState.Success -> {
             val articleList = (articleUiState as OrderUiState.Success).data
 
-            NewsComponent(viewModel,articleList,context, currentLanguage)
+            NewsComponent(viewModel,articleList,context, currentLanguage,bacColor)
 
         }
 

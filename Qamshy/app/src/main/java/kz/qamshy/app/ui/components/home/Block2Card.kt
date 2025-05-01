@@ -29,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -81,7 +82,9 @@ fun Block2Card(
                     fontFamily = PrimaryFontFamily,
                     fontWeight = FontWeight(600),
                     color = Color(0xFF363636),
-                )
+                ),
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(7.dp))
 
@@ -92,7 +95,8 @@ fun Block2Card(
                     fontFamily = PrimaryFontFamily,
                     fontWeight = FontWeight(400),
                     color = Color(0xFF535353),
-                )
+                ),
+
             )
         }
     }

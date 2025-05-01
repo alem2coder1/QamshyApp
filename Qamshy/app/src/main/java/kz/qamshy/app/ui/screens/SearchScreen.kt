@@ -51,18 +51,13 @@ import kz.qamshy.app.viewmodels.SearchViewModel
 
 
 @Composable
-fun SearchScreen(context: Context, isDarkMode:Boolean, viewModel: SearchViewModel) {
+fun SearchScreen(context: Context, isDarkMode:Boolean, viewModel: SearchViewModel,
+                 bacColor:Color
+                 ) {
     val searchText by viewModel.searchText.collectAsState()
     val currentLanguage by QamshyApp.currentLanguage.collectAsState()
     val searchHistoryManager = SearchHistoryManager.getInstance()
     val searchHistory by searchHistoryManager.searchHistory.collectAsState(initial = emptyList())
-    val themeHelper = ThemeHelper(context)
-    val isDarkMode = themeHelper.isDarkModeEnabled()
-    val bacColor = if (isDarkMode) {
-        Color(0xFF202020)
-    }else{
-        Color.White
-    }
     val tagList by viewModel.tagList.collectAsState()
 
     val isSearch by viewModel.isSearch.collectAsState()

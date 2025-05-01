@@ -59,6 +59,7 @@ import kz.qamshy.app.viewmodels.DescriptionViewModel
     viewModel:DescriptionViewModel,
     ){
     val currentLanguage by QamshyApp.currentLanguage.collectAsState()
+    val themeType by QamshyApp.themeType.collectAsState()
      Column(modifier = Modifier.fillMaxWidth()) {
 
          Text(
@@ -140,10 +141,12 @@ import kz.qamshy.app.viewmodels.DescriptionViewModel
 
          Spacer(modifier = Modifier.height(22.dp))
          Column(modifier = Modifier.fillMaxWidth().wrapContentHeight()){
+             val theme = if(themeType) "dark" else "light"
              WebViewWithHeaders(
                  articleModel.article.latynUrl,
                  extraHeaders = mapOf(
-                     "app" to "android"
+                     "app" to "android",
+                     "skinName" to theme
                  )
              )
          }
