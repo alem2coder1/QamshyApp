@@ -2,6 +2,7 @@ package kz.qamshy.app.viewmodels
 
 import android.content.Context
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
@@ -31,7 +32,7 @@ class NewsViewModel(private val apiService: ApiService):QarBaseViewModel() {
 
     fun lectureData(onComplete: () -> Unit = {}) {
         viewModelScope.launch {
-            val result = apiService.queryAsync("GetLatestArticleList?isTop=${_isTop.value}", "GET")
+            val result = apiService.queryAsync("GetLatestArticleList?isTop=${_isTopInt.intValue}", "GET")
             result.fold(
                 onSuccess = { ajaxMsg ->
                     if (ajaxMsg.status.equals("success", ignoreCase = true)) {
@@ -55,11 +56,13 @@ class NewsViewModel(private val apiService: ApiService):QarBaseViewModel() {
             )
         }
     }
-
+    private val _isTopInt = mutableIntStateOf(0)
+    val     isTopInt: Int get()        = _isTopInt.intValue
     private val _isTop = MutableStateFlow(false)
     val isTop: StateFlow<Boolean> = _isTop.asStateFlow()
     fun updateIsTop(isTop:Boolean){
         _isTop.value = isTop
+        _isTopInt.intValue = if (isTop) 1 else 0
         lectureData()
     }
     fun navigateToDescActivity(context: Context, id:Int) {

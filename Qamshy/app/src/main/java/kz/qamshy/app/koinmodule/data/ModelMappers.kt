@@ -4,7 +4,6 @@ import kz.qamshy.app.models.site.ArticleModel
 import kz.qamshy.app.models.site.TagModel
 
 object ModelMappers {
-    // 将ArticleModel转换为ArticleEntity
     fun mapArticleToEntity(article: ArticleModel): ArticleEntity {
         return ArticleEntity(
             id = article.id,
@@ -41,7 +40,6 @@ object ModelMappers {
         )
     }
 
-    // Tag映射
     fun mapTagToEntity(tag: TagModel): TagEntity {
         return TagEntity(
             id = tag.id,

@@ -48,6 +48,10 @@
             android:exported="true"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.Qamshy" />
+        <activity android:name=".ui.activities.SearchActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.Qamshy" />
 
         <service
             android:name=".common.notification.MyFirebaseMessagingService"

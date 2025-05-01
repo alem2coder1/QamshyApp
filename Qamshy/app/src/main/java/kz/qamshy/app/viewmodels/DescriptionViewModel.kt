@@ -11,6 +11,8 @@ import kz.qamshy.app.common.JsonHelper
 import kz.qamshy.app.models.OrderUiState
 import kz.qamshy.app.models.site.ArticleModel
 import kz.qamshy.app.models.site.DescriptionModel
+import kz.qamshy.app.ui.activities.DescriptionActivity
+import kz.qamshy.app.ui.activities.SearchActivity
 import kz.sira.app.viewmodels.QarBaseViewModel
 
 class DescriptionViewModel (
@@ -46,5 +48,29 @@ class DescriptionViewModel (
     }
     fun onBackButtonPressed(context: Context) {
         navigateToBack(context)
+    }
+
+    fun navigateToDescActivity(context: Context, id:Int) {
+        navigateToActivity(
+            context = context,
+            targetActivity = DescriptionActivity ::class,
+            paraDic = mapOf(
+                "id" to id
+            )
+        )
+    }
+    fun navigateToSearchActivity(context: Context,tagId:Int = 0,
+                                 tagTitle:String = "",
+                                 searchText:String = ""
+    ) {
+        navigateToActivity(
+            context = context,
+            targetActivity = SearchActivity ::class,
+            paraDic = mapOf(
+                "tagId" to tagId,
+                "tagTitle" to tagTitle,
+                "searchText" to searchText
+            )
+        )
     }
 }

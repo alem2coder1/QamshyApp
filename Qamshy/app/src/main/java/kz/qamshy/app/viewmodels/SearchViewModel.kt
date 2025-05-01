@@ -19,6 +19,7 @@ import kz.qamshy.app.models.site.CategoryGroup
 import kz.qamshy.app.models.site.CategoryModel
 import kz.qamshy.app.models.site.TagItemModel
 import kz.qamshy.app.ui.activities.DescriptionActivity
+import kz.qamshy.app.ui.activities.SearchActivity
 import kz.sira.app.viewmodels.QarBaseViewModel
 
 class SearchViewModel(
@@ -27,9 +28,12 @@ class SearchViewModel(
 
     private val _searchText = MutableStateFlow("")
     val searchText: StateFlow<String> = _searchText.asStateFlow()
-    fun updateSearch(text: String) {
+    fun updateSearch(text: String,fromQuery:Boolean = false) {
         val trimmedText = text.trim()
         _searchText.value = trimmedText
+        if(fromQuery){
+            performSearch()
+        }
     }
 
     private val searchHistoryManager = SearchHistoryManager.getInstance()
@@ -109,27 +113,35 @@ class SearchViewModel(
         _isRefreshing.value = true
         hasMore = true
         currentPageOffsetAll = 1
-        performSearch {
+        performSearch ({
             _isRefreshing.value = false
-        }
-        performSearch{
+        })
+        performSearch(onComplete = {
             _isRefreshing.value = false
-        }
+        })
     }
 
     fun loadMoreData() {
         if (_isRefreshing.value || isLoadingMore) return
         isLoadingMore = true
         currentPageOffsetAll += 1
-        performSearch {
+        performSearch(onComplete = {
             isLoadingMore = false
-        }
+        })
     }
     private val _articleUiState = MutableStateFlow<OrderUiState<ArticleListModel>>(OrderUiState.Loading)
     val articleUiState: StateFlow<OrderUiState<ArticleListModel>> = _articleUiState.asStateFlow()
-    fun performSearch(onComplete: () -> Unit = {}) {
+
+    private val _isSearch = MutableStateFlow(false)
+    val isSearch: StateFlow<Boolean> = _isSearch.asStateFlow()
+    fun toggleSearch() {
+        _isSearch.value = !_isSearch.value
+    }
+
+    fun performSearch(onComplete: () -> Unit = {},tagId :Int =0) {
+        val keyWord = if (tagId == 0) _searchText.value else tagId
         viewModelScope.launch {
-            val result = apiService.queryAsync("articlelist?keyword=${_searchText.value}", "GET")
+            val result = apiService.queryAsync("articlelist?keyword=${keyWord}", "GET")
             result.fold(
                 onSuccess = { ajaxMsg ->
                     if (ajaxMsg.status.equals("success", ignoreCase = true)) {
@@ -141,6 +153,7 @@ class SearchViewModel(
                                 articleList = newOrders
                             )
                         )
+                        _isSearch.value = true
                     } else {
                         _articleUiState.value = OrderUiState.Success(ArticleListModel())
                     }
@@ -161,5 +174,22 @@ class SearchViewModel(
                 "id" to id
             )
         )
+    }
+    fun navigateToSearchActivity(context: Context,tagId:Int = 0,
+                                 tagTitle:String = "",
+                                 searchText:String = ""
+                                 ) {
+        navigateToActivity(
+            context = context,
+            targetActivity = SearchActivity ::class,
+            paraDic = mapOf(
+                "tagId" to tagId,
+                "tagTitle" to tagTitle,
+                "searchText" to searchText
+            )
+        )
+    }
+    fun onBackButtonPressed(context: Context) {
+        navigateToBack(context)
     }
 }

@@ -72,7 +72,7 @@ class DescriptionActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val context = LocalContext.current
-            val currentLanguage by QamshyApp.currentLanguage.collectAsState()
+
             val id by lazy {
                 intent.getIntExtra("id",0)
             }
@@ -112,7 +112,7 @@ fun DescScreen(viewModel: DescriptionViewModel, context: Context, modifier: Modi
 
         if (articleList.reletedArticleList.isNotEmpty()) {
             Column (
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize().background(Color.White)
             ){
                 Spacer(modifier = Modifier.height(54.dp))
                 Row(modifier=Modifier.fillMaxWidth()
@@ -141,7 +141,10 @@ fun DescScreen(viewModel: DescriptionViewModel, context: Context, modifier: Modi
                 ) {
 
                     item{
-                        DescComponent(articleList.article)
+                        DescComponent(articleList,context,viewModel)
+                    }
+                    item{
+                        Spacer(modifier = Modifier.height(20.dp))
                     }
                 }
 

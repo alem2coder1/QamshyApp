@@ -75,7 +75,9 @@ fun NewsComponent(
     )
 
     val listState = rememberLazyListState()
-    Column(modifier = Modifier.fillMaxSize()){
+    Column(modifier = Modifier.fillMaxSize()
+        .background(Color.White)
+    ){
         Spacer(modifier = Modifier.height(54.dp))
         Row(modifier = Modifier.fillMaxWidth()
             .padding(horizontal = 20.dp)

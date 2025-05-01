@@ -40,6 +40,7 @@ class ApiServiceImpl(
                     .addHeader("User-Agent", "QamshyApp/1.0")
                     .addHeader("language", defaultLanguageProvider())
                     .addHeader("X-Client-Platform", "Android-$androidVersion")
+                    .addHeader("app","android")
                     .build()
                 chain.proceed(request)
             }

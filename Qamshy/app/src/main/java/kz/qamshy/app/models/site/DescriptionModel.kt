@@ -1,7 +1,7 @@
 package kz.qamshy.app.models.site
 
 data class DescriptionModel (
-    val tagSiteList : List<TagItemModel> = emptyList(),
+    val tagList:List<TagModel> = emptyList(),
     val article:ArticleModel = ArticleModel(),
-    val reletedArticleList : List<ArticleModel> = emptyList()
+    val reletedArticleList : List<ArticleModel> = emptyList(),
 )
