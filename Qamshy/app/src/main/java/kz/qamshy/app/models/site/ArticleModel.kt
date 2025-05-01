@@ -9,6 +9,7 @@ data class ArticleModel(
     val addTime: String = "",
     val fullDescription: String = "",
     val videoPath: String = "",
+    val viewCount: Int = 0,
     val latynUrl:String = "",
     val likeCount:Int = 0,
     val author:String = "",

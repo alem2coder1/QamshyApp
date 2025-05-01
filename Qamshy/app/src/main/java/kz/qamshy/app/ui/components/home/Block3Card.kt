@@ -44,16 +44,33 @@ fun Block3Card(
     articleList: List<ArticleModel>
     ,viewModel:HomeViewModel
 ) {
+    val colorList = listOf(
+        Color(0xFF19BD81),
+        Color(0xFF84C3E6),
+        Color(0xFF9A7CFF),
+        Color(0xFFFF9500),
+    )
+
     Column(modifier = Modifier.fillMaxWidth()) {
-        articleList.chunked(2).forEach { rowItems ->
+        articleList.chunked(2).forEachIndexed { rowIndex, rowItems ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                rowItems.forEach { article ->
-                    Block3Item(article = article, modifier = Modifier.weight(1f),viewModel,context)
+                rowItems.forEachIndexed { colIndex, article ->
+                    // 计算当前项目的整体索引以选择颜色
+                    val colorIndex = (rowIndex * 2 + colIndex) % colorList.size
+                    val itemColor = colorList[colorIndex]
+
+                    Block3Item(
+                        article = article,
+                        modifier = Modifier.weight(1f),
+                        viewModel = viewModel,
+                        context = context,
+                        color = itemColor
+                    )
                 }
                 if (rowItems.size == 1) {
                     Spacer(modifier = Modifier.weight(1f))
@@ -64,7 +81,9 @@ fun Block3Card(
 }
 
 @Composable
-fun Block3Item(article: ArticleModel, modifier: Modifier = Modifier,viewModel:HomeViewModel,context:Context) {
+fun Block3Item(article: ArticleModel, modifier: Modifier = Modifier,viewModel:HomeViewModel,context:Context,
+               color: Color
+) {
     Box(
         modifier = modifier
             .height(174.dp)
@@ -112,7 +131,7 @@ fun Block3Item(article: ArticleModel, modifier: Modifier = Modifier,viewModel:Ho
                 modifier = Modifier
                     .height(34.dp)
                     .fillMaxWidth()
-                    .background(Color(0xFFFF9500), RoundedCornerShape(5.dp))
+                    .background(color, RoundedCornerShape(5.dp))
                     .padding(horizontal = 8.dp),
                 contentAlignment = Alignment.Center
             ) {

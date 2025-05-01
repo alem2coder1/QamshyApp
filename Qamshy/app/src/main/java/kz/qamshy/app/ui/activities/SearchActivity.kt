@@ -70,8 +70,8 @@ class SearchActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val tegId by lazy {
-                intent.getIntExtra("tegId",0)
+            val tagId by lazy {
+                intent.getIntExtra("tagId",0)
             }
             val tagTitle by lazy {
                 intent.getStringExtra("tagTitle").orEmpty()
@@ -79,8 +79,14 @@ class SearchActivity: ComponentActivity() {
             val searchText by lazy {
                 intent.getStringExtra("searchText").orEmpty()
             }
-            LaunchedEffect(tegId){
-                searchViewModel.performSearch(tagId = tegId)
+            LaunchedEffect(tagId){
+                if(tagId > 0){
+                    searchViewModel.performSearch(tagId = tagId)
+                }
+                if(searchText.isNotEmpty()){
+                    searchViewModel.performSearch()
+                }
+
             }
             val context = LocalContext.current
             val currentLanguage by QamshyApp.currentLanguage.collectAsState()
@@ -160,104 +166,79 @@ fun SearchList(viewModel: SearchViewModel, context: Context,tagTitle:String = ""
 
             }
             Spacer(modifier = Modifier.height(30.dp))
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing),
-                onRefresh = {
-                    if (!viewModel.isRefreshing.value) {
-                        viewModel.refreshData()
-                    }
-                }
-            ) {
+            if (articleList.articleList.isNotEmpty()) {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                    ,
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
 
-                if (articleList.articleList.isNotEmpty()) {
-                    LazyColumn(
-                        state = listState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                        ,
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-
-                        items(articleList.articleList) { article ->
-                            Row(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
-                                    .clickable(
-                                        indication = null,
-                                        interactionSource = remember { MutableInteractionSource() }
-                                    ) {
-                                        viewModel.navigateToDescActivity(context,article.id)
-                                    }
-                            ) {
-                                Column(modifier = Modifier.weight(0.4f)){
-                                    val painter = rememberAsyncImagePainter(
-                                        model = ImageRequest.Builder(
-                                            LocalContext.current)
-                                            .data(article.thumbnailUrl)
-                                            .decoderFactory(
-                                                SvgDecoder.Factory())
-                                            .build()
-                                    )
-                                    Image(
-                                        painter = painter,
-                                        contentDescription = "pinned image",
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier.width(124.dp)
-                                            .height(68.dp)
-                                            .clip(RoundedCornerShape(10.dp))
-                                    )
+                    items(articleList.articleList) { article ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
+                                    viewModel.navigateToDescActivity(context,article.id)
                                 }
-
-                                Column(modifier = Modifier.weight(0.6f)) {
-                                    Text(
-                                        text = article.title,
-                                        style = TextStyle(
-                                            fontSize = 14.sp,
-                                            lineHeight = 16.8.sp,
-                                            fontFamily = PrimaryFontFamily,
-                                            fontWeight = FontWeight(600),
-                                            color = Color(0xFF363636),
-                                        )
-                                    )
-                                    Spacer(modifier = Modifier.height(7.dp))
-
-                                    Text(
-                                        text = article.addTime,
-                                        style = TextStyle(
-                                            fontSize = 8.sp,
-                                            fontFamily = PrimaryFontFamily,
-                                            fontWeight = FontWeight(400),
-                                            color = Color(0xFF535353),
-                                        )
-                                    )
-                                }
-                            }
-                            Divider(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 14.dp)
-                                    .height(1.dp),
-                                color = Color(0xFFC1C1C1).copy(alpha = 0.5f)
-                            )
-                        }
-                    }
-                } else {
-                    EmptyCard(currentLanguage)
-                }
-            }
-            LaunchedEffect(listState) {
-                snapshotFlow { listState.layoutInfo.visibleItemsInfo }
-                    .map { visibleItems -> visibleItems.lastOrNull()?.index ?: 0 }
-                    .distinctUntilChanged()
-                    .collect { lastVisibleIndex ->
-                        if (
-                            articleList.articleList.isNotEmpty() &&
-                            lastVisibleIndex >= articleList.articleList.lastIndex - 2 &&
-                            !viewModel.isLoadingMore &&
-                            viewModel.canLoadMore()
                         ) {
-                            viewModel.loadMoreData()
+                            Column(modifier = Modifier.weight(0.4f)){
+                                val painter = rememberAsyncImagePainter(
+                                    model = ImageRequest.Builder(
+                                        LocalContext.current)
+                                        .data(article.thumbnailUrl)
+                                        .decoderFactory(
+                                            SvgDecoder.Factory())
+                                        .build()
+                                )
+                                Image(
+                                    painter = painter,
+                                    contentDescription = "pinned image",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier.width(124.dp)
+                                        .height(68.dp)
+                                        .clip(RoundedCornerShape(10.dp))
+                                )
+                            }
+
+                            Column(modifier = Modifier.weight(0.6f)) {
+                                Text(
+                                    text = article.title,
+                                    style = TextStyle(
+                                        fontSize = 14.sp,
+                                        lineHeight = 16.8.sp,
+                                        fontFamily = PrimaryFontFamily,
+                                        fontWeight = FontWeight(600),
+                                        color = Color(0xFF363636),
+                                    )
+                                )
+                                Spacer(modifier = Modifier.height(7.dp))
+
+                                Text(
+                                    text = article.addTime,
+                                    style = TextStyle(
+                                        fontSize = 8.sp,
+                                        fontFamily = PrimaryFontFamily,
+                                        fontWeight = FontWeight(400),
+                                        color = Color(0xFF535353),
+                                    )
+                                )
+                            }
                         }
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 14.dp, horizontal = 20.dp)
+                                .height(1.dp),
+                            color = Color(0xFFC1C1C1).copy(alpha = 0.5f)
+                        )
                     }
+                }
+            } else {
+                EmptyCard(currentLanguage)
             }
         }
 

@@ -53,6 +53,12 @@ import kz.qamshy.app.R
 import kz.qamshy.app.common.Cyrl2LatynHelper
 import kz.qamshy.app.common.Cyrl2ToteHelper
 import kz.qamshy.app.common.Translator.T
+import kz.qamshy.app.common.openFacebook
+import kz.qamshy.app.common.openInstagram
+import kz.qamshy.app.common.openTelegram
+import kz.qamshy.app.common.openTwitter
+import kz.qamshy.app.common.openVK
+import kz.qamshy.app.common.openWhatsApp
 import kz.qamshy.app.models.LanguageModel
 import kz.qamshy.app.ui.activities.MainActivity
 import kz.qamshy.app.ui.components.global.ComposHr
@@ -282,6 +288,12 @@ fun NavSideModal(context: Context,
                         modifier = Modifier
                             .width(40.dp)
                             .height(40.dp)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ){
+                                openTelegram(context, "qamshy","https://t.me/qamshy")
+                            }
                     )
                     Spacer(modifier = Modifier.width(23.dp))
                     Image(
@@ -290,6 +302,12 @@ fun NavSideModal(context: Context,
                         modifier = Modifier
                             .width(40.dp)
                             .height(40.dp)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ){
+                                openWhatsApp(context,"+77071200871","https://api.whatsapp.com/send?phone=77071200871&amp;text=")
+                            }
                     )
                     Spacer(modifier = Modifier.width(23.dp))
                     Image(
@@ -298,6 +316,12 @@ fun NavSideModal(context: Context,
                         modifier = Modifier
                             .width(40.dp)
                             .height(40.dp)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ){
+                                openFacebook(context,"https://www.facebook.com/qamshy")
+                            }
                     )
 
                 }
@@ -314,6 +338,12 @@ fun NavSideModal(context: Context,
                         modifier = Modifier
                             .width(40.dp)
                             .height(40.dp)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ){
+                                openTwitter(context,"qamshy","https://www.facebook.com/qamshy")
+                            }
                     )
                     Spacer(modifier = Modifier.width(23.dp))
                     Image(
@@ -322,6 +352,12 @@ fun NavSideModal(context: Context,
                         modifier = Modifier
                             .width(40.dp)
                             .height(40.dp)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ){
+                                openVK(context,"https://vk.com/qamshyagency","https://vk.com/qamshyagency")
+                            }
                     )
                     Spacer(modifier = Modifier.width(23.dp))
                     Image(
@@ -330,6 +366,12 @@ fun NavSideModal(context: Context,
                         modifier = Modifier
                             .width(40.dp)
                             .height(40.dp)
+                            .clickable (
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ){
+                                openInstagram(context,"qamshy_media","https://www.instagram.com/")
+                            }
                     )
                 }
             }

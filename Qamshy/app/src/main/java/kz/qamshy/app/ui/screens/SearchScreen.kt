@@ -66,8 +66,10 @@ fun SearchScreen(context: Context, isDarkMode:Boolean, viewModel: SearchViewMode
     val tagList by viewModel.tagList.collectAsState()
 
     val isSearch by viewModel.isSearch.collectAsState()
-    if(isSearch){
-        viewModel.navigateToSearchActivity(context,searchText = searchText)
+    LaunchedEffect(isSearch){
+        if(isSearch){
+            viewModel.navigateToSearchActivity(context,searchText = searchText)
+        }
     }
     LaunchedEffect(Unit) {
         viewModel.loadDataTag()
@@ -83,7 +85,7 @@ fun SearchScreen(context: Context, isDarkMode:Boolean, viewModel: SearchViewMode
             CustomTextField(
                 text = searchText,
                 onTextChange = { text ->
-                    viewModel.updateSearch(text)
+                    viewModel.updateSearch(text,context = context)
                 },
                 placeholderText = T("ls_Search", currentLanguage),
                 onSearch = {
@@ -133,7 +135,7 @@ fun SearchScreen(context: Context, isDarkMode:Boolean, viewModel: SearchViewMode
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() }
                     ){
-                        viewModel.updateSearch(query,fromQuery = true)
+                        viewModel.updateSearch(query,fromQuery = true,context)
                     }
                 )
 

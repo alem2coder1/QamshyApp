@@ -3,7 +3,6 @@ package kz.qamshy.app.ui.components.description
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -41,17 +40,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.text.HtmlCompat
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import kz.qamshy.app.R
-import kz.qamshy.app.common.SafeFullDescriptionWebView
 import kz.qamshy.app.common.Translator.T
-import kz.qamshy.app.common.toAnnotatedString
-import kz.qamshy.app.models.LanguageModel
-import kz.qamshy.app.models.site.ArticleModel
-import kz.qamshy.app.models.site.CurrencyModel
+import kz.qamshy.app.common.WebViewWithHeaders
+import kz.qamshy.app.common.shareArticle
 import kz.qamshy.app.models.site.DescriptionModel
 import kz.qamshy.app.ui.QamshyApp
 import kz.qamshy.app.ui.theme.PrimaryFontFamily
@@ -109,7 +104,7 @@ import kz.qamshy.app.viewmodels.DescriptionViewModel
                  )
                  Spacer(modifier = Modifier.width(4.dp))
                  Text(
-                     text = "${articleModel.article.likeCount}",
+                     text = "${articleModel.article.viewCount}",
                      style = TextStyle(
                          fontSize = 11.sp,
                          lineHeight = 14.3.sp,
@@ -145,8 +140,12 @@ import kz.qamshy.app.viewmodels.DescriptionViewModel
 
          Spacer(modifier = Modifier.height(22.dp))
          Column(modifier = Modifier.fillMaxWidth().wrapContentHeight()){
-             SafeFullDescriptionWebView(articleModel.article.fullDescription,modifier = Modifier.fillMaxWidth().wrapContentHeight(), context = context)
-
+             WebViewWithHeaders(
+                 articleModel.article.latynUrl,
+                 extraHeaders = mapOf(
+                     "app" to "android"
+                 )
+             )
          }
          Spacer(modifier = Modifier.height(20.dp))
          if (articleModel.tagList.isNotEmpty()) {
@@ -194,7 +193,9 @@ import kz.qamshy.app.viewmodels.DescriptionViewModel
              horizontalArrangement = Arrangement.SpaceBetween,
              verticalAlignment = Alignment.CenterVertically
              ){
-             Row {
+             Row(
+                 verticalAlignment = Alignment.CenterVertically
+             ) {
                  Image(
                      painter = painterResource(id = R.drawable.avatar_icon),
                      contentDescription = "login",
@@ -216,6 +217,12 @@ import kz.qamshy.app.viewmodels.DescriptionViewModel
                  painter = painterResource(id = R.drawable.share_icon),
                  contentDescription = "share",
                  modifier = Modifier.size(24.dp)
+                     .clickable(
+                         indication = null,
+                         interactionSource = remember { MutableInteractionSource() }
+                     ) {
+                         shareArticle(context,articleModel.article)
+                     }
              )
          }
          Spacer(modifier = Modifier.height(20.dp))

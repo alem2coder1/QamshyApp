@@ -50,13 +50,12 @@ import kz.qamshy.app.common.Cyrl2ToteHelper
 import kz.qamshy.app.common.ThemeHelper
 import kz.qamshy.app.common.Translator.T
 import kz.qamshy.app.common.Translator
+import kz.qamshy.app.ui.theme.darkBac
 import kz.qamshy.app.viewmodels.CategoryViewModel
 import kz.qamshy.app.viewmodels.CurrencyViewModel
 import kz.qamshy.app.viewmodels.NewsViewModel
 import kz.qamshy.app.viewmodels.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
-
 
 class MainActivity : ComponentActivity() {
     private val homeViewModel: HomeViewModel by viewModel()
@@ -122,6 +121,7 @@ class MainActivity : ComponentActivity() {
         val context = LocalContext.current
         val themeHelper = remember { ThemeHelper(context) }
         val isDarkMode = themeHelper.isDarkModeEnabled()
+        val bacColor = if (isDarkMode) darkBac else Color(0xFFFFFFFF)
         val connectivityObserver = remember { ConnectivityObserver(context) }
         val status by connectivityObserver.status.collectAsState(initial = ConnectivityStatus.Available)
         Box(modifier = Modifier.fillMaxSize()
@@ -131,7 +131,7 @@ class MainActivity : ComponentActivity() {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 bottomBar = {
-                    CustomBottomAppBar(navController,currentLanguage)
+                    CustomBottomAppBar(navController,currentLanguage,isDarkMode)
                 }
             ) { innerPadding ->
                 NavHost(
@@ -148,7 +148,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     when(status){
                         ConnectivityStatus.Available -> {
-                            composable("home") { HomeScreen(context,isDarkMode,homeViewModel,currencyViewModel) }
+                            composable("home") { HomeScreen(context,isDarkMode,homeViewModel,currencyViewModel,bacColor) }
                             composable("category") { CategoryScreen(context,isDarkMode,categoryViewModel,currentLanguage) }
                             composable("search") {  SearchScreen(context,isDarkMode,searchViewModel) }
                             composable("news") { NewsScreen(context,isDarkMode,newsViewModel) }
@@ -168,7 +168,7 @@ class MainActivity : ComponentActivity() {
 
 
     @Composable
-    fun CustomBottomAppBar(navController: NavHostController,currentLanguage:LanguageModel) {
+    fun CustomBottomAppBar(navController: NavHostController,currentLanguage:LanguageModel,isDarkMode:Boolean) {
         val currentBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = currentBackStackEntry?.destination?.route
 
@@ -192,12 +192,12 @@ class MainActivity : ComponentActivity() {
             "latyn" -> Cyrl2LatynHelper.cyrl2Latyn("Жаңалықтар")
             else -> T("ls_News",currentLanguage)
         }
-
+        val bacColor = if (isDarkMode) darkBac else Color(0xFFFFFFFF)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(89.dp)
-                .background(color = Color(0xFFFFFFFF))
+                .background(color = bacColor)
         ) {
             Row(
                 modifier = Modifier

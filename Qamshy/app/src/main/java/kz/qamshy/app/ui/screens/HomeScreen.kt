@@ -75,23 +75,20 @@ import kz.qamshy.app.ui.theme.darkBac
 import kz.qamshy.app.ui.theme.darkColor
 import kz.qamshy.app.viewmodels.CurrencyViewModel
 
-
 @Composable
-fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,currencyViewModel:CurrencyViewModel) {
+fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,currencyViewModel:CurrencyViewModel,
+               bacColor:Color
+               ) {
     val currentLanguage by QamshyApp.currentLanguage.collectAsState()
     LaunchedEffect(currentLanguage) {
         viewModel.loadIndex(forceRefresh = true)
         currencyViewModel.lectureData()
     }
-    val homeBacColor = if(isDarkMode) darkColor else Color.White
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val listState = rememberLazyListState()
     val articleUiState by viewModel.articleUiState.collectAsState()
-    val themeHelper = ThemeHelper(context)
-    val isDarkMode = themeHelper.isDarkModeEnabled()
-    val bacColor = if(isDarkMode) darkBac else Color.White
     when (articleUiState) {
         is OrderUiState.Loading -> {
             CircularBarsLoading(
@@ -128,7 +125,7 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
                             gesturesEnabled = true
                         ) {
                             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                                Column(modifier = Modifier.fillMaxSize().background(homeBacColor)) {
+                                Column(modifier = Modifier.fillMaxSize().background(bacColor)) {
                                     Spacer(modifier = Modifier.height(30.dp))
                                     Column(modifier = Modifier.weight(0.1f),
                                         verticalArrangement = Arrangement.Bottom
@@ -288,6 +285,10 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
         is OrderUiState.Error -> {
             ToastHelper.showMessage(context, "error", T((articleUiState as OrderUiState.Error).message,currentLanguage))
         }
+
+        is OrderUiState.Error -> TODO()
+        OrderUiState.Loading -> TODO()
+        is OrderUiState.Success -> TODO()
     }
 
 }

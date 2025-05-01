@@ -28,12 +28,14 @@ class SearchViewModel(
 
     private val _searchText = MutableStateFlow("")
     val searchText: StateFlow<String> = _searchText.asStateFlow()
-    fun updateSearch(text: String,fromQuery:Boolean = false) {
+    fun updateSearch(text: String,fromQuery:Boolean = false,context:Context) {
         val trimmedText = text.trim()
         _searchText.value = trimmedText
         if(fromQuery){
-            performSearch()
+            navigateToSearchActivity(context = context,searchText = trimmedText)
         }
+
+
     }
 
     private val searchHistoryManager = SearchHistoryManager.getInstance()
@@ -108,27 +110,6 @@ class SearchViewModel(
         _selectedTitle.value = title
     }
 
-    fun refreshData() {
-        if (_isRefreshing.value) return
-        _isRefreshing.value = true
-        hasMore = true
-        currentPageOffsetAll = 1
-        performSearch ({
-            _isRefreshing.value = false
-        })
-        performSearch(onComplete = {
-            _isRefreshing.value = false
-        })
-    }
-
-    fun loadMoreData() {
-        if (_isRefreshing.value || isLoadingMore) return
-        isLoadingMore = true
-        currentPageOffsetAll += 1
-        performSearch(onComplete = {
-            isLoadingMore = false
-        })
-    }
     private val _articleUiState = MutableStateFlow<OrderUiState<ArticleListModel>>(OrderUiState.Loading)
     val articleUiState: StateFlow<OrderUiState<ArticleListModel>> = _articleUiState.asStateFlow()
 
@@ -140,8 +121,9 @@ class SearchViewModel(
 
     fun performSearch(onComplete: () -> Unit = {},tagId :Int =0) {
         val keyWord = if (tagId == 0) _searchText.value else tagId
+        val kerWordText = if(tagId == 0) "keyword" else "tagId"
         viewModelScope.launch {
-            val result = apiService.queryAsync("articlelist?keyword=${keyWord}", "GET")
+            val result = apiService.queryAsync("articlelist?${kerWordText}=${keyWord}", "GET")
             result.fold(
                 onSuccess = { ajaxMsg ->
                     if (ajaxMsg.status.equals("success", ignoreCase = true)) {
