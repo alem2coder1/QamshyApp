@@ -80,6 +80,7 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
                bacColor:Color
                ) {
     val currentLanguage by QamshyApp.currentLanguage.collectAsState()
+    val token = QamshyApp.currentAndroidToken
     LaunchedEffect(currentLanguage) {
         viewModel.loadIndex(forceRefresh = true)
         currencyViewModel.lectureData()

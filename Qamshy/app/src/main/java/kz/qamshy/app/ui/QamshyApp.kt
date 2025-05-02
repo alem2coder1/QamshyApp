@@ -11,6 +11,8 @@ import kz.qamshy.app.models.LanguageModel
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.google.firebase.FirebaseApp
+import com.google.firebase.messaging.FirebaseMessaging
 import kz.qamshy.app.common.SearchHistoryManager
 import kz.qamshy.app.koinmodule.appModule
 import kz.qamshy.app.koinmodule.databaseModule
@@ -165,6 +167,9 @@ class QamshyApp : Application() {
             )
         }
         SearchHistoryManager.getInstance().initialize(this)
+        FirebaseApp.initializeApp(this)
+
+        retrieveFirebaseToken()
 
     }
 
@@ -179,3 +184,13 @@ class QamshyApp : Application() {
 
 }
 
+fun retrieveFirebaseToken() {
+    FirebaseMessaging.getInstance().token
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                QamshyApp.setCurrentAndroidToken(token)
+            } else {
+            }
+        }
+}

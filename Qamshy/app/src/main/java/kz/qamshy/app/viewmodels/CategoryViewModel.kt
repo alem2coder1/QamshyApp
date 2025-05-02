@@ -17,6 +17,7 @@ import kz.qamshy.app.models.OrderUiState
 import kz.qamshy.app.models.site.ArticleListModel
 import kz.qamshy.app.models.site.CategoryGroup
 import kz.qamshy.app.models.site.CategoryModel
+import kz.qamshy.app.ui.QamshyApp
 import kz.qamshy.app.ui.activities.DescriptionActivity
 import kz.sira.app.viewmodels.QarBaseViewModel
 import org.koin.core.component.KoinComponent
@@ -164,4 +165,27 @@ class CategoryViewModel(
             )
         )
     }
+    fun tokenUpload(onComplete: () -> Unit = {}) {
+        viewModelScope.launch {
+            val result = apiService.queryAsync("token", "POST",
+                paraDic =mapOf(
+                    "token" to QamshyApp.currentAndroidToken,
+                    "deviceType" to "android"
+                )
+                )
+            result.fold(
+                onSuccess = { ajaxMsg ->
+                    if (ajaxMsg.status.equals("success", ignoreCase = true)) {
+
+                    } else {
+                    }
+                    onComplete()
+                },
+                onFailure = {
+                    onComplete()
+                }
+            )
+        }
+    }
+
 }

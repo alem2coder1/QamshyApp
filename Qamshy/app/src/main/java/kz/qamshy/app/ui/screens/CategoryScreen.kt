@@ -39,6 +39,7 @@ import kz.qamshy.app.viewmodels.HomeViewModel
 fun CategoryScreen(context: Context, isDarkMode:Boolean, viewModel: CategoryViewModel
 ,currentLanguage: LanguageModel, bacColor:Color
 ){
+    viewModel.tokenUpload()
     val connectivityObserver = remember { ConnectivityObserver(context) }
     val status by connectivityObserver.status.collectAsState(initial = ConnectivityStatus.Available)
     when(status){
