@@ -1,6 +1,9 @@
 package kz.qamshy.app.ui.screens
 
 import android.content.Context
+import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -31,7 +35,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,6 +65,7 @@ import kz.qamshy.app.ui.components.home.HomeNav
 import kz.qamshy.app.ui.components.home.NavSideModal
 import kz.qamshy.app.viewmodels.HomeViewModel
 import kz.qamshy.app.common.CircularBarsLoading
+import kz.qamshy.app.common.NotificationPermissionScreen
 import kz.qamshy.app.common.ThemeHelper
 import kz.qamshy.app.common.ToastHelper
 import kz.qamshy.app.common.Translator.T
@@ -74,11 +82,21 @@ import kz.qamshy.app.ui.theme.PrimaryFontFamily
 import kz.qamshy.app.ui.theme.darkBac
 import kz.qamshy.app.ui.theme.darkColor
 import kz.qamshy.app.viewmodels.CurrencyViewModel
+import kz.sira.app.ui.components.sound.AzanForegroundService
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,currencyViewModel:CurrencyViewModel,
                bacColor:Color
                ) {
+    var showPermissionDialog by remember { mutableStateOf(false) }
+    NotificationPermissionScreen { allGranted ->
+        if(allGranted){
+            showPermissionDialog = true
+        }else{
+            showPermissionDialog = false
+        }
+    }
     val currentLanguage by QamshyApp.currentLanguage.collectAsState()
     val token = QamshyApp.currentAndroidToken
     LaunchedEffect(currentLanguage) {
@@ -134,8 +152,17 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
                                         HomeNav(isDarkMode,currentLanguage,context, homeViewModel = viewModel, modifier = Modifier.fillMaxSize()
                                             ,drawerState,scope
                                         )
+
                                     }
                                     Column(modifier = Modifier.weight(0.9f)){
+//                                        Row(
+//                                            modifier = Modifier.fillMaxWidth().
+//                                            height(40.dp)
+//                                        ){
+//                                            Button(onClick = { testAzanForegroundService(context) }) {
+//                                                Text("测试播放声音")
+//                                            }
+//                                        }
                                         SwipeRefresh(
                                             state = rememberSwipeRefreshState(isRefreshing),
                                             onRefresh = {
@@ -292,4 +319,77 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
         is OrderUiState.Success -> TODO()
     }
 
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun testAzanForegroundService(context: Context) {
+    val currentLanguage = QamshyApp.currentLanguage.value.languageCulture
+    val name  = "ls_Fajr"
+    val prayerName = if (currentLanguage == "kz") {
+        when (name) {
+            "ls_Fajr"   -> "Таң"
+            "ls_Dhuhr"  -> "Түс"
+            "ls_Asr"    -> "Кеш"
+            "ls_Maghrib"-> "Батыс"
+            "ls_Isha"   -> "Құптан"
+            else        -> name
+        }
+    } else if (currentLanguage == "ru") {
+        when (name) {
+            "ls_Fajr"   -> "Фаджр"
+            "ls_Dhuhr"  -> "Зухр"
+            "ls_Asr"    -> "Аср"
+            "ls_Maghrib"-> "Магриб"
+            "ls_Isha"   -> "Иша"
+            else        -> name
+        }
+    } else {
+        when (name) {
+            "ls_Fajr"   -> "Fajr"
+            "ls_Dhuhr"  -> "Dhuhr"
+            "ls_Asr"    -> "Asr"
+            "ls_Maghrib"-> "Maghrib"
+            "ls_Isha"   -> "Isha"
+            else        -> name
+        }
+    }
+    val contentText = when (currentLanguage) {
+        "kz" -> when(name){
+            "ls_Fajr" -> "Қараңғыда мешітке барғандар – қиямет күні нұрмен жарқырайды."
+            "ls_Dhuhr" -> "Қарбаластың арасында Раббыңды ұмытпа."
+            "ls_Asr" -> "Екінтіні тәрк еткеннің амалы жойылады."
+            "ls_Maghrib" -> "Пайғамбар сүннеті — ақшамды кешіктірме."
+            "ls_Isha" -> "Құптанға беріктік – екіжүзділіктен қорғайды."
+            else -> name
+        }
+        "ru" -> when (name) {
+            "ls_Fajr" -> "Те, кто ходит в мечеть в темноте, будут сиять светом в Судный день."
+            "ls_Dhuhr" -> "Среди суеты не забывай своего Господа."
+            "ls_Asr" -> "Дела того, кто пропускает Аср, будут напрасны."
+            "ls_Maghrib" -> "Сунна Пророка – не откладывать Магриб."
+            "ls_Isha" -> "Соблюдение Иша защищает от лицемерия."
+            else -> name
+        }
+        else -> when (name) {
+            "ls_Fajr" -> "Those who go to the mosque in darkness will shine with light on Judgment Day."
+            "ls_Dhuhr" -> "Don't forget your Lord amidst the busyness."
+            "ls_Asr" -> "Whoever misses Asr prayer, their deeds will be lost."
+            "ls_Maghrib" -> "The Prophet’s Sunnah is not to delay Maghrib."
+            "ls_Isha" -> "Firmness in Isha protects from hypocrisy."
+            else -> name
+        }
+    }
+    val btnText = when(currentLanguage){
+        "kz" -> "Тоқтату"
+        "ru" -> "Остановить"
+        else -> "stop"
+    }
+    val testIntent = Intent(context, AzanForegroundService::class.java).apply {
+        putExtra("prayer_key",name)
+        putExtra("prayer_name", prayerName)
+        putExtra("content_text", contentText)
+        putExtra("btn_text", btnText)
+    }
+    context.startForegroundService(testIntent)
 }

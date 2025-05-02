@@ -60,6 +60,26 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <receiver
+            android:name="kz.sira.app.ui.components.sound.AzanReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="STOP_AZAN" />
+                <action android:name="PLAY_AZAN" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="kz.sira.app.ui.components.sound.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="kz.sira.app.ui.components.sound.AzanForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"
+            />
     </application>
 
 </manifest>

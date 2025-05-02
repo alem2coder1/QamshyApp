@@ -169,7 +169,7 @@ class QamshyApp : Application() {
         SearchHistoryManager.getInstance().initialize(this)
         FirebaseApp.initializeApp(this)
 
-        retrieveFirebaseToken()
+//        retrieveFirebaseToken()
 
     }
 
@@ -184,13 +184,13 @@ class QamshyApp : Application() {
 
 }
 
-fun retrieveFirebaseToken() {
-    FirebaseMessaging.getInstance().token
-        .addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val token = task.result
-                QamshyApp.setCurrentAndroidToken(token)
-            } else {
-            }
-        }
-}
+//fun retrieveFirebaseToken() {
+//    FirebaseMessaging.getInstance().token
+//        .addOnCompleteListener { task ->
+//            if (task.isSuccessful) {
+//                val token = task.result
+//                QamshyApp.setCurrentAndroidToken(token)
+//            } else {
+//            }
+//        }
+//}
