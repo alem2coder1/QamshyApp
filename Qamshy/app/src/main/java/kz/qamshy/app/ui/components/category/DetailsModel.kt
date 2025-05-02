@@ -2,6 +2,7 @@ package kz.qamshy.app.ui.components.category
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import com.example.mylibrary.ThemeHelper
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -41,7 +42,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kz.qamshy.app.R
-import kz.qamshy.app.common.ThemeHelper
 import kz.qamshy.app.models.site.CategoryList
 import kz.qamshy.app.ui.theme.PrimaryFontFamily
 import kz.qamshy.app.viewmodels.CategoryViewModel

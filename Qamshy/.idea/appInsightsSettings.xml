@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="kz.qamshy.app" />
+                  <option name="mobileSdkAppId" value="1:345394895404:android:149ca1fcf08ab9548e0f89" />
+                  <option name="projectId" value="finalappandroid-6d5ee" />
+                  <option name="projectNumber" value="345394895404" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

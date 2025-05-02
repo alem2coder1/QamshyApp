@@ -24,14 +24,22 @@ dependencyResolutionManagement {
         maven { url = uri("https://jitpack.io")}
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/zhanel01/AndroidRepo")
+            url  = uri("https://maven.pkg.github.com/zhanel01/AndroidRepo")
             credentials {
-                username = providers.gradleProperty("gpr.user").getOrElse(providers.environmentVariable("GITHUB_USERNAME").getOrElse(""))
-                password = providers.gradleProperty("gpr.key").getOrElse(providers.environmentVariable("GITHUB_TOKEN").getOrElse(""))
+                username = providers.gradleProperty("gpr.user")
+                    .orNull
+                    ?: providers.environmentVariable("GITHUB_USER").orNull
+                            ?: ""
+                password = providers.gradleProperty("gpr.key")
+                    .orNull
+                    ?: providers.environmentVariable("GITHUB_TOKEN").orNull
+                            ?: ""
             }
         }
+
     }
 }
+
 
 rootProject.name = "Qamshy"
 include(":app")

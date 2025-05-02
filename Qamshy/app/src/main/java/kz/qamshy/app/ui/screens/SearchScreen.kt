@@ -41,7 +41,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kz.qamshy.app.common.SearchHistoryManager
-import kz.qamshy.app.common.ThemeHelper
 import kz.qamshy.app.common.Translator.T
 import kz.qamshy.app.ui.QamshyApp
 import kz.qamshy.app.ui.components.global.CustomTextField

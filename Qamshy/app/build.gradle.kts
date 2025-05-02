@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "kz.qamshy.app"
-        minSdk = 33
+        minSdk = 24
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -77,7 +77,7 @@ dependencies {
     testImplementation("androidx.room:room-testing:2.6.1")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     implementation ("com.example.mylibrary:mylibrary:1.0.0")
-
+    implementation(libs.myweblibrary)
 
 
     

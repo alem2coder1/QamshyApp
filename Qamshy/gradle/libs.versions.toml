@@ -52,7 +52,10 @@ playServicesMaps = "19.2.0"
 coreTestingVersion = "2.2.0"
 junitKtx = "1.2.1"
 truth = "1.1.5"
+myweblibrary = "1.0.3"
+
 [libraries]
+myweblibrary = { module = "com.example.mylibrary:mylibrary", version.ref = "myweblibrary" }
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanistSwiperefresh" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontrollerVersion" }
 android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "androidImageCropperVersion" }
