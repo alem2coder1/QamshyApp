@@ -155,14 +155,14 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
 
                                     }
                                     Column(modifier = Modifier.weight(0.9f)){
-//                                        Row(
-//                                            modifier = Modifier.fillMaxWidth().
-//                                            height(40.dp)
-//                                        ){
-//                                            Button(onClick = { testAzanForegroundService(context) }) {
-//                                                Text("测试播放声音")
-//                                            }
-//                                        }
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth().
+                                            height(40.dp)
+                                        ){
+                                            Button(onClick = { testAzanForegroundService(context) }) {
+                                                Text("测试播放声音")
+                                            }
+                                        }
                                         SwipeRefresh(
                                             state = rememberSwipeRefreshState(isRefreshing),
                                             onRefresh = {

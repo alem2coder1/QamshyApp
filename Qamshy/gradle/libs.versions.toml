@@ -49,6 +49,8 @@ firebaseVertexai = "16.3.0"
 playServicesLocation = "21.3.0"
 firebaseMessagingKtx = "24.1.1"
 playServicesMaps = "19.2.0"
+coreTestingVersion = "2.2.0"
+junitKtx = "1.2.1"
 truth = "1.1.5"
 [libraries]
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanistSwiperefresh" }
@@ -106,6 +108,9 @@ firebase-vertexai = { group = "com.google.firebase", name = "firebase-vertexai",
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+androidx-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "coreTestingVersion" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
+
 
 
 [plugins]
