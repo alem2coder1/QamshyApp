@@ -52,9 +52,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
-import coil.decode.SvgDecoder
-import coil.request.ImageRequest
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -155,14 +152,14 @@ fun HomeScreen(context: Context, isDarkMode:Boolean, viewModel: HomeViewModel,cu
 
                                     }
                                     Column(modifier = Modifier.weight(0.9f)){
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth().
-                                            height(40.dp)
-                                        ){
-                                            Button(onClick = { testAzanForegroundService(context) }) {
-                                                Text("测试播放声音")
-                                            }
-                                        }
+//                                        Row(
+//                                            modifier = Modifier.fillMaxWidth().
+//                                            height(40.dp)
+//                                        ){
+//                                            Button(onClick = { testAzanForegroundService(context) }) {
+//                                                Text("测试播放声音")
+//                                            }
+//                                        }
                                         SwipeRefresh(
                                             state = rememberSwipeRefreshState(isRefreshing),
                                             onRefresh = {
