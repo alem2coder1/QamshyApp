@@ -89,12 +89,12 @@
 |---|------------|-------------------------------------------------------------|
 | 1 | Advanced Kotlin techniques | Coroutines, Flow/StateFlow, inline, sealed, operator overloads |
 | 2 | Jetpack Navigation | NavHost + Safe Args |
-| 3 | Intents & 3 Deep Links | `qamshy://news/{id}`, `qamshy://author/{id}`, `https://qamshy.kz/share/{slug}` |
+| 3 | Intents & 3 Deep Links |  
 | 4 | Service / WorkManager & Broadcast | Foreground Service + WorkManager, динамический FCM-Receiver |
 | 5 | Advanced OkHttp | Log, Auth, Retry, Dynamic-Header interceptors |
 | 6 | DI (Koin) | Модули `networkModule`, `databaseModule`, `domainModule`, `presentationModule` |
 | 7 | Clean Architecture + modularization | Gradle-модули: `app`, `ui`, `domain`, `data`, `common`, `testing` |
-| 8 | Unit-tests | Покрытие ⩾80 % для репозиториев, use-cases, ViewModel |
+| 8 | Unit-tests | для Data |
 | 9 | Firebase | Auth, Cloud Messaging, Crashlytics, Remote Config |
 |10 | Private dependency | `theme-helper` из GitHub Packages |
 |11 | Jetpack Compose screen | Экран «Settings» + карточки статей |
