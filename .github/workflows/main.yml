@@ -23,11 +23,15 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: SonarCloud Code Analysis
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+     - name: SonarCloud Code Analysis
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+    args: >-
+      -Dsonar.projectKey=alem2coder1_QamshyApp
+      -Dsonar.organization=alem2coder1
 
       - name: Run Android Lint Checks
         continue-on-error: true
