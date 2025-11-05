@@ -19,24 +19,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://artifactory.2gis.dev/sdk-maven-release") }
-        maven { url = uri("https://developer.huawei.com/repo/") }
         maven { url = uri("https://jitpack.io")}
-        maven {
-            name = "GitHubPackages"
-            url  = uri("https://maven.pkg.github.com/zhanel01/AndroidRepo")
-            credentials {
-                username = providers.gradleProperty("gpr.user")
-                    .orNull
-                    ?: providers.environmentVariable("GITHUB_USER").orNull
-                            ?: ""
-                password = providers.gradleProperty("gpr.key")
-                    .orNull
-                    ?: providers.environmentVariable("GITHUB_TOKEN").orNull
-                            ?: ""
-            }
-        }
-
     }
 }
 

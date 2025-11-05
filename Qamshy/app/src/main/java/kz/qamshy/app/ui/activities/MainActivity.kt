@@ -48,7 +48,7 @@ import kz.qamshy.app.common.ConnectivityObserver
 import kz.qamshy.app.common.ConnectivityStatus
 import kz.qamshy.app.common.Cyrl2LatynHelper
 import kz.qamshy.app.common.Cyrl2ToteHelper
-import com.example.mylibrary.ThemeHelper
+import kz.qamshy.app.common.ThemeHelper
 import kz.qamshy.app.common.Translator.T
 import kz.qamshy.app.common.Translator
 import kz.qamshy.app.ui.theme.darkBac

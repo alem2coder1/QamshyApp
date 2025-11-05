@@ -2,7 +2,6 @@ package kz.qamshy.app.ui.components.category
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import com.example.mylibrary.ThemeHelper
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -61,8 +60,7 @@ fun DetailsModel(
     )
 
     val context = LocalContext.current
-    val themeHelper = ThemeHelper(context)
-    val isDarkMode = themeHelper.isDarkModeEnabled()
+    val isDarkMode = false
     val selectedTeacherId by viewModel.selectedTeacherId.collectAsState()
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,

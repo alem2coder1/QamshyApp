@@ -76,8 +76,6 @@ dependencies {
     testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("androidx.room:room-testing:2.6.1")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    implementation ("com.example.mylibrary:mylibrary:1.0.0")
-    implementation(libs.myweblibrary)
 
 
     
