@@ -9,7 +9,6 @@ on:
 jobs:
   security-analysis:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -23,20 +22,17 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-     - name: SonarCloud Code Analysis
-      uses: SonarSource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with:
-    args: >-
-      -Dsonar.projectKey=alem2coder1_QamshyApp
-      -Dsonar.organization=alem2coder1
+      - name: SonarCloud Code Analysis
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          args: -Dsonar.projectKey=alem2coder1_QamshyApp -Dsonar.organization=alem2coder1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Run Android Lint Checks
         continue-on-error: true
-        run: |
-          ./gradlew lint --stacktrace
+        run: ./gradlew lint --stacktrace
 
       - name: OWASP Dependency Security Check
         uses: dependency-check/Dependency-Check_Action@main
@@ -44,9 +40,7 @@ jobs:
           project: 'QamshyApp'
           path: '.'
           format: 'JSON,HTML,SARIF'
-          args: >-
-            --scan
-            --enableExperimental
+          args: '--scan --enableExperimental'
 
       - name: Upload Lint Reports
         if: always()
