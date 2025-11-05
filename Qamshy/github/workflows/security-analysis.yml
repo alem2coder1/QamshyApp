@@ -9,7 +9,7 @@ on:
 jobs:
   security-analysis:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -26,18 +26,18 @@ jobs:
       - name: Grant Gradle Permissions
         run: chmod +x gradlew
 
-      - name: 🔍 SonarCloud Code Analysis
+      - name: SonarCloud Code Analysis
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: 🔧 Run Android Lint Checks
+      - name: Run Android Lint Checks
         continue-on-error: true
         run: |
           ./gradlew lint --stacktrace
 
-      - name: 📦 OWASP Dependency Security Check
+      - name: OWASP Dependency Security Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
           project: 'QamshyApp'
@@ -47,7 +47,7 @@ jobs:
             --scan
             --enableExperimental
 
-      - name:  Upload Lint Reports
+      - name: Upload Lint Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -55,7 +55,7 @@ jobs:
           path: '**/build/reports/lint-results*.html'
           retention-days: 30
 
-      - name:  Upload Dependency-Check Reports
+      - name: Upload Dependency-Check Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -64,3 +64,5 @@ jobs:
             dependency-check-report.html
             dependency-check-report.json
           retention-days: 30
+```
+
